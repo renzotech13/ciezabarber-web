@@ -7,28 +7,28 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Hedvig+Letters+Serif:opsz@12..24&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root{ --bg:#f5f3f0; --ink:#1a1a1a; --brown:#1a1a1a; --gold:#b5723c; --cream:#eeeae4; --muted:#6b6b68; --line:#e5e1da; --border:#ddd8cf; --serif:'Hedvig Letters Serif',serif; }
+  :root{ --bg:#0a0a0b; --ink:#eeeef0; --brown:#eeeef0; --gold:#d7d9de; --gold-bright:#f5f6f8; --cream:#1d1d20; --muted:#96969c; --line:rgba(255,255,255,.09); --border:rgba(255,255,255,.14); --serif:'Hedvig Letters Serif',serif; }
   *{box-sizing:border-box}
   body{margin:0;font-family:'Open Sans',sans-serif;background:var(--bg);color:var(--ink)}
-  a{color:#986a3e;text-decoration:none}
+  a{color:var(--gold);text-decoration:none}
   a:hover{color:var(--brown)}
   h1,h2,h3{font-family:var(--serif);font-weight:400;color:var(--brown);margin:0}
   button{font-family:inherit}
-  header{position:sticky;top:0;z-index:50;background:rgba(253,247,239,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+  header{position:sticky;top:0;z-index:50;background:rgba(10,10,11,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
   .header-inner{max-width:1180px;margin:0 auto;padding:14px 32px;display:flex;align-items:center;justify-content:space-between;gap:24px}
   nav{display:flex;gap:8px;align-items:center}
   nav a{padding:10px 16px;border-radius:999px;font-size:14px;font-weight:600;color:var(--brown)}
   nav a:hover{background:var(--cream)}
-  nav a.current{font-weight:700;color:#fff;background:var(--gold)}
-  nav a.current:hover{color:#fff}
+  nav a.current{font-weight:700;color:#0a0a0b;background:var(--gold)}
+  nav a.current:hover{color:#0a0a0b}
   .reserva-grid{display:grid;grid-template-columns:1fr 360px;gap:40px;align-items:start;max-width:1180px;margin:0 auto;padding:32px 32px 90px;box-sizing:border-box}
   .reserva-aside{position:sticky;top:96px}
   @media (max-width:900px){ .reserva-grid{grid-template-columns:1fr} .reserva-aside{position:static;top:auto} }
   .crumbs{display:flex;align-items:center;gap:8px;margin-bottom:18px;flex-wrap:wrap}
-  .crumbs .sep{color:#d8c5ac}
-  .chip{padding:10px 18px;border-radius:999px;border:1.5px solid var(--border);background:#fff;color:var(--brown);font-size:13.5px;font-weight:600;cursor:pointer;white-space:nowrap}
-  .chip.active{background:var(--brown);color:#fff;border-color:var(--brown)}
-  .svc-card{position:relative;background:#fff;border:1.5px solid var(--line);border-radius:20px;padding:20px 22px;display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
+  .crumbs .sep{color:#5a5a60}
+  .chip{padding:10px 18px;border-radius:999px;border:1.5px solid var(--border);background:var(--cream);color:var(--brown);font-size:13.5px;font-weight:600;cursor:pointer;white-space:nowrap}
+  .chip.active{background:var(--brown);color:#0a0a0b;border-color:var(--brown)}
+  .svc-card{position:relative;background:var(--cream);border:1.5px solid var(--line);border-radius:20px;padding:20px 22px;display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
   .svc-card.selected{border-color:var(--gold)}
   .svc-cat{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin-bottom:4px}
   .svc-name{font-size:16px;font-weight:600;color:var(--ink)}
@@ -36,35 +36,35 @@
   .svc-desc{font-size:13.5px;color:var(--muted);line-height:1.55;margin:0;max-width:520px}
   .svc-price{font-size:16px;font-weight:700;color:var(--brown);margin-top:12px}
   .svc-toggle{flex-shrink:0;width:38px;height:38px;border-radius:999px;border:none;background:var(--cream);color:var(--gold);font-size:18px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer}
-  .svc-toggle.selected{background:var(--gold);color:#fff}
-  .day-btn{flex-shrink:0;width:78px;display:flex;flex-direction:column;align-items:center;gap:2px;padding:14px 4px;border-radius:16px;border:1.5px solid var(--border);background:#fff;color:var(--ink);cursor:pointer}
-  .day-btn:disabled{background:#f5efe6;color:#c9b8a3;cursor:not-allowed;border-color:var(--line)}
-  .day-btn.selected{background:var(--gold);color:#fff;border-color:var(--gold)}
+  .svc-toggle.selected{background:var(--gold);color:#0a0a0b}
+  .day-btn{flex-shrink:0;width:78px;display:flex;flex-direction:column;align-items:center;gap:2px;padding:14px 4px;border-radius:16px;border:1.5px solid var(--border);background:var(--cream);color:var(--ink);cursor:pointer}
+  .day-btn:disabled{background:#141416;color:#5a5a60;cursor:not-allowed;border-color:var(--line)}
+  .day-btn.selected{background:var(--gold);color:#0a0a0b;border-color:var(--gold)}
   .day-wd{font-size:12px;font-weight:600;text-transform:lowercase}
   .day-num{font-size:19px;font-weight:700}
   .day-mo{font-size:10.5px;text-transform:lowercase}
-  .nav-arrow{width:32px;height:32px;border-radius:999px;border:1px solid var(--border);background:#fff;color:var(--brown);cursor:pointer;display:flex;align-items:center;justify-content:center}
-  .time-btn{width:100%;box-sizing:border-box;text-align:left;padding:16px 20px;border-radius:16px;border:1.5px solid var(--border);background:#fff;color:var(--ink);font-size:15px;font-weight:600;cursor:pointer}
-  .time-btn.selected{background:var(--gold);color:#fff;border-color:var(--gold)}
-  .fv-btn{text-align:left;background:#fff;border:1.5px solid var(--line);border-radius:18px;padding:18px 20px;cursor:pointer}
+  .nav-arrow{width:32px;height:32px;border-radius:999px;border:1px solid var(--border);background:var(--cream);color:var(--brown);cursor:pointer;display:flex;align-items:center;justify-content:center}
+  .time-btn{width:100%;box-sizing:border-box;text-align:left;padding:16px 20px;border-radius:16px;border:1.5px solid var(--border);background:var(--cream);color:var(--ink);font-size:15px;font-weight:600;cursor:pointer}
+  .time-btn.selected{background:var(--gold);color:#0a0a0b;border-color:var(--gold)}
+  .fv-btn{text-align:left;background:var(--cream);border:1.5px solid var(--line);border-radius:18px;padding:18px 20px;cursor:pointer}
   .fv-btn.selected{border-color:var(--gold)}
   .fv-title{font-size:15.5px;font-weight:600;color:var(--ink)}
   .fv-sub{font-size:13px;color:var(--muted);margin-top:2px}
   .field label{font-size:13px;font-weight:600;color:var(--brown);display:block;margin-bottom:6px}
   .field input, .field textarea{width:100%;box-sizing:border-box;padding:12px 16px;border-radius:12px;border:1.5px solid var(--border);font-size:14px;font-family:inherit}
-  .aside-box{background:#fff;border-radius:22px;box-shadow:0 10px 40px rgba(99,59,44,.1);padding:22px;display:flex;flex-direction:column;gap:16px}
+  .aside-box{background:var(--cream);border-radius:22px;box-shadow:0 10px 40px rgba(0,0,0,.5);padding:22px;display:flex;flex-direction:column;gap:16px}
   .aside-hr{border-top:1px solid var(--line)}
-  .btn{background:var(--gold);color:#fff;border:none;padding:13px 18px;border-radius:999px;font-size:14px;font-weight:700;cursor:pointer}
+  .btn{background:var(--gold);color:#0a0a0b;border:none;padding:13px 18px;border-radius:999px;font-size:14px;font-weight:700;cursor:pointer}
   .btn:disabled{opacity:.5;cursor:not-allowed}
   .btn-outline{background:none;border:1.5px solid var(--border);color:var(--brown);padding:13px 18px;border-radius:999px;font-size:14px;font-weight:600;cursor:pointer}
-  .overlay{position:fixed;inset:0;z-index:90;display:none;align-items:center;justify-content:center;background:radial-gradient(circle at 30% 20%,#f0c98a,#b5723c 45%,#5c3a22 100%);background-size:200% 200%;animation:bgDrift 8s ease-in-out infinite alternate}
+  .overlay{position:fixed;inset:0;z-index:90;display:none;align-items:center;justify-content:center;background:radial-gradient(circle at 30% 20%,#3a3a3e,#1a1a1c 45%,#000 100%);background-size:200% 200%;animation:bgDrift 8s ease-in-out infinite alternate}
   .overlay.show{display:flex}
   @keyframes bgDrift{0%{background-position:0% 0%}100%{background-position:100% 100%}}
   @keyframes confettiZoom{0%{opacity:0;transform:scale(.7)}60%{opacity:1;transform:scale(1.03)}100%{opacity:1;transform:scale(1)}}
-  .confirm-card{animation:confettiZoom .5s cubic-bezier(.2,.8,.2,1);background:#fff;border-radius:28px;padding:44px 40px;max-width:420px;width:88%;text-align:center;box-shadow:0 30px 80px rgba(0,0,0,.3)}
-  .modal-backdrop{position:fixed;inset:0;background:rgba(63,49,38,.4);z-index:80;display:none;align-items:center;justify-content:center}
+  .confirm-card{animation:confettiZoom .5s cubic-bezier(.2,.8,.2,1);background:var(--cream);border-radius:28px;padding:44px 40px;max-width:420px;width:88%;text-align:center;box-shadow:0 30px 80px rgba(0,0,0,.3)}
+  .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:80;display:none;align-items:center;justify-content:center}
   .modal-backdrop.show{display:flex}
-  .modal-card{background:#fff;border-radius:22px;padding:26px;width:440px;max-width:90vw;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+  .modal-card{background:var(--cream);border-radius:22px;padding:26px;width:440px;max-width:90vw;box-shadow:0 20px 60px rgba(0,0,0,.2)}
 </style>
 </head>
 <body>
@@ -87,7 +87,7 @@
 
 <div class="overlay" id="confirmOverlay">
   <div class="confirm-card">
-    <div style="width:76px;height:76px;border-radius:999px;background:var(--gold);color:#fff;display:flex;align-items:center;justify-content:center;font-size:36px;margin:0 auto 22px">✓</div>
+    <div style="width:76px;height:76px;border-radius:999px;background:var(--gold);color:#0a0a0b;display:flex;align-items:center;justify-content:center;font-size:36px;margin:0 auto 22px">✓</div>
     <h2 style="font-size:30px;margin:0 0 12px">¡Solicitud enviada!</h2>
     <p style="font-size:14.5px;color:var(--muted);margin:0 0 28px">Te escribiremos al WhatsApp <span id="confirmPhone"></span> para coordinar el adelanto y confirmar tu cita.</p>
     <a href="citas.html" class="btn" style="display:inline-block">Ver mi cita</a>
@@ -320,7 +320,7 @@ function renderStep2(){
   if (state.dispError) {
     html += '<p style="font-size:14px;color:#b3392f">No se pudo cargar la disponibilidad. <button class="btn-outline" onclick="cargarDisponibilidad()">Reintentar</button></p>';
   } else if (state.dispLoading) {
-    html += '<p style="font-size:14px;color:#a89886">Consultando horarios disponibles…</p>';
+    html += '<p style="font-size:14px;color:#5a5a60">Consultando horarios disponibles…</p>';
   } else if (state.dateIdx != null) {
     const dayHours = state.disponibilidad[toISODate(days[state.dateIdx])] || [];
     if (dayHours.length > 0) {
@@ -330,7 +330,7 @@ function renderStep2(){
       });
       html += '</div>';
     } else {
-      html += '<p style="font-size:14px;color:#a89886">No hay horas disponibles ese día. Elige otra fecha.</p>';
+      html += '<p style="font-size:14px;color:#5a5a60">No hay horas disponibles ese día. Elige otra fecha.</p>';
     }
   }
   return html;
@@ -366,13 +366,13 @@ function renderStep4(){
     </div>
   </div>`;
   html += '<h3 style="font-size:15px;margin:0 0 12px">Más detalles</h3>';
-  html += `<div style="background:#fff;border-radius:18px;padding:20px 22px;margin-bottom:24px">
+  html += `<div style="background:var(--cream);border-radius:18px;padding:20px 22px;margin-bottom:24px">
     <div style="font-size:14.5px;font-weight:600;color:var(--ink);margin-bottom:4px">Política de cancelación</div>
     <div style="font-size:13.5px;color:var(--muted)">Cancela la cita con al menos 30 minutos de antelación.</div>
   </div>`;
   html += '<h3 style="font-size:15px;margin:0 0 12px">Comentarios o solicitudes</h3>';
-  html += `<div style="background:#fff;border-radius:18px;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px;max-width:600px">
-    <span style="font-size:14px;color:${hasComment ? 'var(--ink)' : '#a89886'}">${hasComment ? state.comment : '¿Algo que quieras que sepamos?'}</span>
+  html += `<div style="background:var(--cream);border-radius:18px;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px;max-width:600px">
+    <span style="font-size:14px;color:${hasComment ? 'var(--ink)' : '#5a5a60'}">${hasComment ? state.comment : '¿Algo que quieras que sepamos?'}</span>
     <button class="btn-outline" style="flex-shrink:0;padding:9px 18px;font-size:13.5px" onclick="openCommentModal()">${hasComment ? 'Editar' : 'Añadir'}</button>
   </div>`;
   html += `<div style="display:flex;gap:10px;align-items:flex-start;background:var(--cream);border-radius:14px;padding:14px 16px;margin-top:24px;max-width:600px">
@@ -432,13 +432,13 @@ function renderSidebar(){
         <div><div style="font-size:14.5px;font-weight:600;color:var(--ink)">${s.name}</div><div style="font-size:12.5px;color:var(--muted);margin-top:2px">${s.duration}</div></div>
         <div style="display:flex;align-items:center;gap:10px">
           <span style="font-size:14.5px;font-weight:700;color:var(--brown);white-space:nowrap">${fmtPrice(s.price)}</span>
-          <button aria-label="Quitar" style="background:none;border:none;color:#c9b8a3;font-size:16px;cursor:pointer;line-height:1;padding:0" onclick="toggleService('${s.id}')">✕</button>
+          <button aria-label="Quitar" style="background:none;border:none;color:#5a5a60;font-size:16px;cursor:pointer;line-height:1;padding:0" onclick="toggleService('${s.id}')">✕</button>
         </div>
       </div>`;
     });
     html += '</div>';
   } else {
-    html += '<p style="font-size:13.5px;color:#a89886;margin:0">Elige un servicio para comenzar tu reserva.</p>';
+    html += '<p style="font-size:13.5px;color:#5a5a60;margin:0">Elige un servicio para comenzar tu reserva.</p>';
   }
 
   if (hasSelection) {
@@ -465,7 +465,7 @@ function render(){
     const n = i + 1;
     const active = state.step === n && !state.confirmed;
     const done = state.step > n || state.confirmed;
-    crumbsHtml += `<span style="display:flex;align-items:center;gap:8px"><span style="font-size:13.5px;font-weight:${active ? 700 : 600};color:${active ? 'var(--brown)' : done ? 'var(--gold)' : '#c9b8a3'}">${label}</span>${i < crumbLabels.length - 1 ? '<span class="sep">›</span>' : ''}</span>`;
+    crumbsHtml += `<span style="display:flex;align-items:center;gap:8px"><span style="font-size:13.5px;font-weight:${active ? 700 : 600};color:${active ? 'var(--brown)' : done ? 'var(--gold)' : '#5a5a60'}">${label}</span>${i < crumbLabels.length - 1 ? '<span class="sep">›</span>' : ''}</span>`;
   });
   crumbsHtml += '</div>';
 
