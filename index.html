@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Raabta Beauty Academy — Belleza, Salón y Academia</title>
+<meta name="description" content="Portal de belleza para la mujer: cremas y skincare, salón especializado en microblading y academia con cursos certificados en Los Olivos, Lima.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Hedvig+Letters+Serif:opsz@12..24&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fdf7ef; --ink:#3f3126; --brown:#633b2c; --brown-dark:#4a2b1f;
+    --gold:#a47234; --gold-dark:#8a5e28; --gold-light:#e0b57e;
+    --cream:#f7ecdf; --muted:#7a685d; --line:#f0e4d3; --serif:'Hedvig Letters Serif',serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:'Open Sans',sans-serif;background:var(--bg);color:var(--ink)}
+  a{color:var(--gold);text-decoration:none}
+  img{max-width:100%}
+  .wrap{max-width:1200px;margin:0 auto;padding-left:32px;padding-right:32px}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--gold);color:#fff;padding:12px 22px;border-radius:999px;font-size:14px;font-weight:600;border:none;cursor:pointer;transition:background .15s}
+  .btn:hover{background:var(--gold-dark);color:#fff}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;background:var(--cream);color:var(--brown);padding:8px 16px;border-radius:999px;font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+  .eyebrow .dot{width:6px;height:6px;border-radius:999px;background:var(--gold)}
+  h1,h2,h3{font-family:var(--serif);font-weight:400;color:var(--brown);margin:0}
+
+  @keyframes wheelClockwise{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+  .wheel-rotate{animation:wheelClockwise 45s linear infinite}
+  @keyframes revolveSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+  @keyframes revolveCounter{from{transform:rotate(0deg)}to{transform:rotate(-360deg)}}
+  .bento-revolve{animation:revolveSpin 20s linear infinite}
+  .bento-revolve .bento-counter{animation:revolveCounter 20s linear infinite}
+  @keyframes marqueeVertical{from{transform:translateY(0)}to{transform:translateY(-50%)}}
+  .bento-marquee{animation:marqueeVertical 18s linear infinite}
+
+  /* header */
+  header{position:sticky;top:0;z-index:50;background:rgba(253,247,239,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+  .header-inner{padding:14px 32px;display:flex;align-items:center;justify-content:space-between;gap:24px}
+  nav{display:flex;gap:8px;align-items:center}
+  nav a{padding:10px 16px;border-radius:999px;font-size:14px;font-weight:600;color:var(--brown)}
+  nav a:hover{background:var(--cream)}
+  .header-actions{display:flex;align-items:center;gap:12px}
+  .cart-btn{position:relative;width:44px;height:44px;border-radius:999px;border:1px solid #ecdcc6;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center}
+  .cart-btn:hover{background:var(--cream)}
+  .cart-badge{position:absolute;top:-4px;right:-4px;background:var(--gold);color:#fff;font-size:11px;font-weight:700;min-width:18px;height:18px;border-radius:999px;display:flex;align-items:center;justify-content:center;padding:0 4px}
+  .cart-badge.hidden{display:none}
+  @media (max-width:900px){
+    nav{display:none}
+    .header-inner{padding:12px 20px}
+  }
+
+  /* hero */
+  .hero-copy{padding:72px 32px 40px;text-align:center}
+  .hero-copy h1{font-size:64px;line-height:1.08;max-width:820px;margin:0 auto 20px;text-wrap:balance}
+  .hero-copy p{font-size:17px;color:var(--muted);max-width:520px;margin:0 auto 8px;line-height:1.6}
+  .hero-media{padding:0 32px 100px}
+  .hero-frame{position:relative;height:420px;border-radius:32px;overflow:hidden}
+  .hero-frame img{width:100%;height:100%;object-fit:cover;display:block}
+  .wheel-wrap{position:absolute;bottom:-30px;left:50%;pointer-events:none;z-index:2}
+  .wheel-pill{position:absolute;top:50%;left:50%}
+  .wheel-pill-inner{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:8px;background:rgba(255,255,255,.1);border-radius:999px;padding:8px;border:1px solid rgba(255,255,255,.2);width:36px;height:140px;box-sizing:border-box}
+  .wheel-pill-avatar{width:26px;height:26px;border-radius:999px;overflow:hidden;flex-shrink:0}
+  .wheel-pill-avatar img{width:100%;height:100%;object-fit:cover}
+  .wheel-pill-label{color:#fff;font-size:10.5px;font-weight:600;writing-mode:vertical-rl}
+  .hero-explore{position:absolute;left:50%;bottom:0;transform:translateX(-50%);background:var(--bg);padding:14px 44px 8px;border-radius:999px 999px 0 0;display:flex;flex-direction:column;align-items:center;gap:4px}
+  .hero-explore .star{color:var(--gold);font-size:18px}
+  .hero-explore a{font-size:13.5px;font-weight:600;color:var(--brown)}
+  @media (max-width:700px){
+    .hero-copy h1{font-size:38px}
+    .hero-frame{height:320px}
+  }
+
+  /* bento gallery */
+  .gallery{padding:20px 32px 90px}
+  .gallery-grid{display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(2,1fr);gap:20px;align-items:center}
+  .gallery-grid img{width:100%;height:220px;object-fit:cover;border-radius:24px}
+  .gallery-copy{grid-column:2 / span 2;grid-row:1 / span 2;text-align:center;padding:0 20px}
+  .gallery-copy .eyebrow{margin-bottom:22px}
+  .gallery-copy h2{font-size:34px;line-height:1.4;margin:0 0 26px}
+  .gallery-rating{display:flex;align-items:center;justify-content:center;gap:10px;color:var(--gold)}
+  .gallery-rating .stars{font-size:15px}
+  .gallery-rating span:last-child{font-size:13.5px;color:var(--muted);font-weight:600}
+  @media (max-width:900px){
+    .gallery-grid{grid-template-columns:1fr}
+    .gallery-copy{grid-column:1;grid-row:auto;padding:0}
+    .gallery-grid img{height:180px}
+  }
+
+  /* three cards */
+  .cards{padding:16px 32px 64px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px}
+  .card{border-radius:28px;overflow:hidden;display:flex;flex-direction:column}
+  .card-light{background:#fff;box-shadow:0 6px 30px rgba(99,59,44,.07)}
+  .card-dark{background:var(--brown);box-shadow:0 10px 36px rgba(99,59,44,.22)}
+  .card-media{height:210px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600}
+  .card-media.tienda{background:linear-gradient(135deg,var(--cream),#e8d3b8);color:#986a3e}
+  .card-media.salon{background:linear-gradient(135deg,#7a4a35,#4a2b1f);color:#e8d3b8}
+  .card-media.academia{background:linear-gradient(135deg,#efe0cb,#dcc4a2);color:#986a3e}
+  .card-body{padding:26px 26px 28px;display:flex;flex-direction:column;gap:10px;flex:1}
+  .card-tag{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+  .card-title{font-size:26px}
+  .card-desc{font-size:14px;line-height:1.6;margin:0;flex:1}
+  .card-price-row{display:flex;align-items:center;justify-content:space-between;border-radius:16px;padding:12px 16px;margin:6px 0 12px}
+  .card-cta{padding:13px 22px;border-radius:999px;font-size:14px;font-weight:600;text-align:center}
+  .card-light .card-tag,.card-light .card-price{color:var(--gold)}
+  .card-light .card-price-row{background:var(--bg)}
+  .card-light .card-desc{color:var(--muted)}
+  .card-light .card-cta{background:var(--gold);color:#fff}
+  .card-light .card-cta:hover{background:var(--gold-dark)}
+  .card-dark .card-tag{color:var(--gold-light)}
+  .card-dark .card-title{color:var(--bg)}
+  .card-dark .card-desc{color:#d9c3ae}
+  .card-dark .card-price-row{background:rgba(253,247,239,.1)}
+  .card-dark .card-price-row span:first-child{color:var(--bg)}
+  .card-dark .card-price{color:var(--gold-light)}
+  .card-dark .card-cta{background:var(--gold-light);color:var(--brown-dark);font-weight:700}
+  .card-dark .card-cta:hover{background:#eec89a}
+  @media (max-width:900px){ .cards{grid-template-columns:1fr} }
+
+  /* team */
+  .team{padding:20px 32px 80px;display:grid;grid-template-columns:5fr 7fr;gap:56px;align-items:center}
+  .team-photo{position:relative;border-radius:32px;overflow:hidden;height:520px}
+  .team-photo img{width:100%;height:100%;object-fit:cover;display:block}
+  .team-photo-overlay{position:absolute;left:16px;right:16px;bottom:16px;background:rgba(99,59,44,.55);backdrop-filter:blur(6px);border-radius:20px;padding:20px 22px;display:flex;align-items:center;justify-content:space-between}
+  .team-photo-overlay h3{font-size:22px;color:#fff;margin:0 0 4px}
+  .team-photo-overlay p{font-size:13px;color:#f0e0cc;margin:0;font-weight:600}
+  .team-copy h2{font-size:44px;line-height:1.1;margin:0 0 18px}
+  .team-copy .eyebrow{margin-bottom:20px}
+  .team-copy p{font-size:15px;color:var(--muted);line-height:1.7;margin:0 0 30px}
+  .team-list{display:flex;flex-direction:column;gap:18px;margin-bottom:30px}
+  .team-list-item{display:flex;align-items:center;gap:12px}
+  .team-list-icon{width:38px;height:38px;border-radius:999px;background:var(--cream);display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:16px;flex-shrink:0}
+  .team-list-item span:last-child{font-size:15px;font-weight:600;color:var(--ink)}
+  @media (max-width:900px){
+    .team{grid-template-columns:1fr}
+    .team-photo{height:360px}
+  }
+
+  /* about */
+  .about{padding:72px 32px 20px;display:grid;grid-template-columns:5fr 7fr;gap:56px;align-items:center}
+  .about-copy .eyebrow-text{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
+  .about-copy h2{font-size:40px;line-height:1.15;margin:14px 0 18px}
+  .about-copy p{font-size:15px;color:var(--muted);line-height:1.7;margin:0 0 24px}
+  .about-copy .btn-outline{display:inline-block;border:1.5px solid var(--gold);color:var(--gold);padding:12px 24px;border-radius:999px;font-size:14px;font-weight:600}
+  .about-copy .btn-outline:hover{background:var(--gold);color:#fff}
+  .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .about-grid img{width:100%;object-fit:cover;border-radius:24px}
+  .about-grid .big{height:340px}
+  .about-grid .stack{display:flex;flex-direction:column;gap:16px}
+  .about-grid .small1{height:160px}
+  .about-grid .small2{height:164px}
+  @media (max-width:900px){ .about{grid-template-columns:1fr} }
+
+  /* testimonials */
+  .testimonials{padding:20px 32px 72px}
+  .testimonials-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+  .t-card{background:#fff;border-radius:22px;padding:24px;box-shadow:0 6px 24px rgba(99,59,44,.06);display:flex;flex-direction:column;gap:12px}
+  .t-stars{display:flex;gap:3px}
+  .t-quote{font-size:14px;color:var(--ink);line-height:1.6;margin:0;flex:1}
+  .t-who{display:flex;align-items:center;gap:12px}
+  .t-who img{width:38px;height:38px;border-radius:999px;object-fit:cover}
+  .t-name{font-size:13.5px;font-weight:700;color:var(--brown)}
+  .t-service{font-size:12.5px;color:var(--muted)}
+  @media (max-width:900px){ .testimonials-grid{grid-template-columns:1fr 1fr} }
+  @media (max-width:560px){ .testimonials-grid{grid-template-columns:1fr} }
+
+  /* why choose */
+  .why{padding:20px 32px 80px}
+  .why-head{text-align:center;margin-bottom:44px}
+  .why-head .eyebrow{margin-bottom:18px}
+  .why-head h2{font-size:46px;line-height:1.1}
+  .why-grid{display:grid;grid-template-columns:4fr 8fr;gap:20px;align-items:stretch}
+  .why-left{display:flex;flex-direction:column;gap:20px}
+  .compare{position:relative;border-radius:24px;overflow:hidden;height:400px;padding:26px;display:flex;flex-direction:column;justify-content:flex-end;--pos:50%}
+  .compare img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .compare .after{z-index:0}
+  .compare .before{clip-path:polygon(0 0, var(--pos) 0, var(--pos) 100%, 0 100%)}
+  .compare-tag{position:absolute;top:20px;background:rgba(255,255,255,.5);backdrop-filter:blur(4px);color:var(--ink);font-size:13px;font-weight:600;padding:6px 14px;border-radius:8px;z-index:2}
+  .compare-tag.left{left:20px}
+  .compare-tag.right{right:20px}
+  .compare-handle{position:absolute;top:0;bottom:0;width:2px;background:#fff;left:var(--pos);transform:translateX(-50%);z-index:2;pointer-events:none}
+  .compare-handle .dot{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:38px;height:38px;background:#fff;border-radius:999px;display:flex;align-items:center;justify-content:center;color:var(--gold);box-shadow:0 4px 14px rgba(0,0,0,.2)}
+  .compare input[type=range]{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:ew-resize;z-index:3;margin:0}
+  .compare-copy{position:relative;z-index:2;pointer-events:none}
+  .compare-copy h3{color:#fff;font-size:24px;font-weight:600;margin:0 0 8px;text-shadow:0 2px 12px rgba(0,0,0,.3)}
+  .compare-copy .meta{display:flex;gap:16px;color:#fff;font-size:13px;font-weight:600}
+  .book-card{background:var(--cream);border-radius:24px;padding:30px 24px;display:flex;flex-direction:column;align-items:center;text-align:center;border:1px solid rgba(164,114,52,.12)}
+  .book-card-icon{width:64px;height:64px;border:2px dashed var(--gold);border-radius:999px;display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:11px;font-weight:700;text-transform:uppercase;margin-bottom:18px}
+  .book-card p{font-size:13.5px;font-weight:600;color:var(--muted);margin:0 0 4px}
+  .book-card h3{font-size:26px;margin:0 0 6px}
+  .book-card .sub{font-size:13.5px;color:var(--muted);font-weight:400;margin:0 0 20px}
+  .book-card .cta{background:var(--gold);color:#fff;padding:11px 24px;border-radius:999px;font-size:13.5px;font-weight:700}
+  .why-right{display:flex;flex-direction:column;gap:20px}
+  .why-top-row{display:grid;grid-template-columns:7fr 5fr;gap:20px;height:280px}
+  .hands-card{background:var(--cream);border-radius:24px;padding:30px;position:relative;overflow:hidden;border:1px solid rgba(164,114,52,.1)}
+  .hands-card h3{font-size:24px;font-weight:600;max-width:220px;position:relative;z-index:2}
+  .hands-card img.left-hand{position:absolute;bottom:20px;left:0;width:46%;object-fit:contain}
+  .hands-card img.right-hand{position:absolute;bottom:-6px;right:-14px;width:56%;object-fit:contain}
+  .specialists-card{background:var(--cream);border-radius:24px;padding:26px;display:flex;flex-direction:column;justify-content:space-between;border:1px solid rgba(164,114,52,.1)}
+  .specialists-card h3{font-size:22px;font-weight:600;margin:0 0 8px}
+  .specialists-card p{font-size:13.5px;color:var(--muted);margin:0}
+  .chips{display:flex;flex-direction:column;gap:8px}
+  .chips span{background:#fff;border-radius:999px;padding:6px 14px;font-size:12.5px;font-weight:600;color:var(--brown);align-self:flex-start}
+  .why-bottom-row{display:grid;grid-template-columns:7fr 5fr;gap:20px;flex:1;min-height:320px}
+  .why-bottom-left{display:flex;flex-direction:column;gap:20px}
+  .formation-card{background:var(--cream);border-radius:24px;padding:26px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;text-align:center;position:relative;overflow:hidden;flex:1;min-height:220px;border:1px solid rgba(164,114,52,.1)}
+  .bento-revolve{position:absolute;top:34%;left:50%;width:0;height:0;pointer-events:none}
+  .bento-revolve-item{position:absolute;top:0;left:0}
+  .bento-revolve-item img{width:32px;height:32px;border-radius:10px;object-fit:cover;border:1px solid rgba(255,255,255,.5);box-shadow:0 4px 12px rgba(0,0,0,.12)}
+  .formation-copy{position:relative;z-index:2;margin-top:70px}
+  .formation-copy h3{font-size:20px;font-weight:600;margin:0 0 6px}
+  .formation-copy p{font-size:12.5px;color:var(--muted);margin:0;max-width:210px}
+  .video-card{position:relative;border-radius:24px;overflow:hidden;height:180px;background:linear-gradient(135deg,#7a4a35,#4a2b1f)}
+  .video-card .fade{position:absolute;inset:0;background:linear-gradient(to top,rgba(99,59,44,.55),transparent 60%)}
+  .video-card .caption{position:absolute;bottom:20px;left:0;right:0;text-align:center}
+  .video-card .caption h3{color:#fff;font-size:22px;font-weight:600;margin:0}
+  .marquee-card{background:var(--cream);border-radius:24px;overflow:hidden;display:flex;flex-direction:column;border:1px solid rgba(164,114,52,.1)}
+  .marquee-head{text-align:center;padding:26px 20px 16px}
+  .marquee-head .stars{display:flex;justify-content:center;gap:2px;color:var(--gold);margin-bottom:8px}
+  .marquee-head p{font-size:14px;font-weight:600;color:var(--brown);margin:0}
+  .marquee-viewport{position:relative;flex:1;overflow:hidden;min-height:260px;-webkit-mask-image:linear-gradient(to bottom,transparent,black 15%,black 85%,transparent);mask-image:linear-gradient(to bottom,transparent,black 15%,black 85%,transparent)}
+  .marquee-track{position:absolute;top:0;left:0;right:0;display:flex;flex-direction:column;gap:10px;padding:0 16px}
+  .mt-card{background:#fff;border-radius:16px;padding:16px}
+  .mt-card .stars{color:var(--gold);font-size:11px;margin-bottom:6px}
+  .mt-card p{font-size:12.5px;color:var(--ink);line-height:1.5;margin:0 0 10px}
+  .mt-card .row{display:flex;align-items:center;justify-content:space-between}
+  .mt-card .row .name{font-size:12px;font-weight:700;color:var(--brown)}
+  .mt-card .row img{width:28px;height:28px;border-radius:999px;object-fit:cover}
+  @media (max-width:900px){
+    .why-grid{grid-template-columns:1fr}
+    .why-top-row,.why-bottom-row{grid-template-columns:1fr;height:auto}
+  }
+
+  /* featured services */
+  .services{padding:24px 32px 72px}
+  .services-head{text-align:center;margin-bottom:36px}
+  .services-head span{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
+  .services-head h2{font-size:36px;margin:10px 0 0}
+  .services-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:18px}
+  .service-card{display:block;border-radius:22px;overflow:hidden;background:#fff;text-align:left}
+  .service-card img{width:100%;height:150px;object-fit:cover;display:block}
+  .service-card-body{padding:14px 16px}
+  .service-card-name{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:2px}
+  .service-card-price{font-size:13px;color:var(--gold);font-weight:600}
+  @media (max-width:900px){ .services-grid{grid-template-columns:repeat(2,1fr)} }
+
+  /* footer */
+  footer{background:var(--brown);color:#e8d8c8}
+  .footer-inner{padding:56px 32px 32px;display:grid;grid-template-columns:2fr 1fr 1fr 1.4fr;gap:40px}
+  .footer-logo{height:60px;width:auto;filter:brightness(0) invert(1);opacity:.95;margin-bottom:16px}
+  .footer-inner p{font-size:13.5px;line-height:1.7;color:#cbb59f;margin:0;max-width:280px}
+  .footer-col{display:flex;flex-direction:column;gap:10px}
+  .footer-col h4{font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-light);margin:0 0 6px}
+  .footer-col a,.footer-col span{font-size:14px;color:#e8d8c8}
+  .footer-col a:hover{color:#fff}
+  .footer-col .fine{font-size:13px;color:#cbb59f}
+  .footer-bottom{border-top:1px solid rgba(232,216,200,.18)}
+  .footer-bottom-inner{max-width:1200px;margin:0 auto;padding:18px 32px;font-size:12.5px;color:#cbb59f}
+  @media (max-width:900px){ .footer-inner{grid-template-columns:1fr 1fr;gap:28px} }
+
+  /* whatsapp fab */
+  .wa-fab{position:fixed;bottom:28px;right:28px;z-index:60;width:58px;height:58px;border-radius:999px;background:#25D366;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(37,211,102,.4)}
+  .wa-fab:hover{background:#1fb457}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <img id="headerLogo" data-default="uploads/raabta-logo-color-primario.png" alt="Raabta Beauty Academy" style="height:54px;width:auto">
+    <nav>
+      <a href="#belleza">Belleza</a>
+      <a href="salon.html">Salón</a>
+      <a href="academia.html">Academia</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+    <div class="header-actions">
+      <button id="cartBtn" class="cart-btn" aria-label="Carrito">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#633b2c" stroke-width="1.8"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+        <span id="cartBadge" class="cart-badge hidden">0</span>
+      </button>
+      <a href="reserva.html" class="btn">Reservar cita</a>
+    </div>
+  </div>
+</header>
+
+<section class="hero-copy">
+  <div class="eyebrow">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="#a47234"><path d="M12 2l2.4 7.2H22l-6 4.6 2.3 7.2-6.3-4.5-6.3 4.5L8 13.8 2 9.2h7.6z"></path></svg>
+    <span id="heroEyebrow">Los Olivos, Lima · Lun–Sáb</span>
+  </div>
+  <h1 id="heroTitle">Belleza, formación y cuidado para la mujer</h1>
+  <p id="heroSubtitle">Cremas y skincare para el cuidado de tu piel, salón especializado en microblading y academia con cursos certificados.</p>
+</section>
+
+<section class="hero-media wrap" style="padding-left:0;padding-right:0">
+  <div class="hero-frame">
+    <img id="heroImage" data-default="assets/hero-image.webp" alt="Raabta Beauty Academy">
+    <div id="wheelWrap" class="wheel-wrap wheel-rotate"></div>
+    <div class="hero-explore">
+      <span class="star">✳</span>
+      <a href="salon.html">Explorar servicios</a>
+    </div>
+  </div>
+</section>
+
+<section class="gallery wrap" style="padding-left:0;padding-right:0">
+  <div class="gallery-grid">
+    <img src="assets/gallery-1.webp" alt="Tratamiento facial Raabta" style="grid-column:1;grid-row:1">
+    <img src="assets/service-11.webp" alt="Delineado de ojo" style="grid-column:4;grid-row:1">
+    <img src="assets/about-4.webp" alt="Cuidado de piel" style="grid-column:1;grid-row:2">
+    <img src="assets/service-2.webp" alt="Micropigmentación de cejas" style="grid-column:4;grid-row:2">
+    <div class="gallery-copy">
+      <div class="eyebrow"><span class="dot"></span>Cuidado experto en cada servicio</div>
+      <h2>Combinamos técnica profesional con un trato 💅 cercano para que salgas luciendo tu mejor versión 🌿</h2>
+      <div class="gallery-rating">
+        <span class="stars">★★★★★</span>
+        <span>Opiniones reales de nuestras clientas</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cards wrap" style="padding-left:0;padding-right:0">
+  <div id="belleza" class="card card-light">
+    <div class="card-media tienda" id="bellezaMedia">Cargando…</div>
+    <div class="card-body">
+      <span class="card-tag">Belleza</span>
+      <h3 class="card-title">Cremas y cuidado de la piel</h3>
+      <p class="card-desc" id="bellezaDesc"></p>
+      <div class="card-price-row"><span id="bellezaName"></span><span class="card-price" id="bellezaPrice"></span></div>
+      <a href="#belleza" class="card-cta">Comprar</a>
+    </div>
+  </div>
+  <div id="salon" class="card card-dark">
+    <div class="card-media salon" id="salonMedia">Foto: procedimiento de microblading</div>
+    <div class="card-body">
+      <span class="card-tag">Salón</span>
+      <h3 class="card-title">Servicios de belleza</h3>
+      <p class="card-desc">Microblading, micropigmentación, faciales y más. Toda cita se confirma con un adelanto.</p>
+      <div class="card-price-row"><span>Microblading · 2h</span><span class="card-price">S/ 250</span></div>
+      <a href="reserva.html" class="card-cta">Reservar cita</a>
+    </div>
+  </div>
+  <div id="academia" class="card card-light">
+    <div class="card-media academia" id="academiaMedia">Foto: alumna practicando microblading</div>
+    <div class="card-body">
+      <span class="card-tag">Academia</span>
+      <h3 class="card-title">Cursos certificados</h3>
+      <p class="card-desc">Modalidad mixta: 3 días presenciales + clases grabadas y manual de práctica en PDF.</p>
+      <div class="card-price-row"><span>Microblading básico · 3 días</span><span class="card-price">S/ 1200</span></div>
+      <a href="dashboard.html" class="card-cta">Inscribirme</a>
+    </div>
+  </div>
+</section>
+
+<section class="team wrap" style="padding-left:0;padding-right:0">
+  <div class="team-photo">
+    <img src="uploads/markleirys.jpg" alt="Markleirys Valladares">
+    <div class="team-photo-overlay">
+      <div>
+        <h3>Markleirys Valladares</h3>
+        <p>Nail Artist &amp; especialista en PMU</p>
+      </div>
+      <span style="color:#e0b57e;font-size:20px">✳</span>
+    </div>
+  </div>
+  <div class="team-copy">
+    <div class="eyebrow"><span class="dot"></span>Nuestro equipo</div>
+    <h2>Un equipo que ama lo que hace</h2>
+    <p>Markleirys es Nail Artist y especialista en pestañas y cejas, con certificación en micropigmentación (PMU) por Latinbrow. Su formación combina técnica precisa con un ojo artístico para resultados naturales y duraderos.</p>
+    <div class="team-list">
+      <div class="team-list-item"><div class="team-list-icon">💅</div><span>Uñas: acrílico, poligel y gel</span></div>
+      <div class="team-list-item"><div class="team-list-icon">👁</div><span>Pestañas: lifting y extensiones</span></div>
+      <div class="team-list-item"><div class="team-list-icon">✨</div><span>Cejas: PMU y micropigmentación certificada Latinbrow</span></div>
+    </div>
+    <a href="reserva.html" class="btn" style="font-weight:700">Agenda con Markleirys</a>
+  </div>
+</section>
+
+<section class="about wrap" style="padding-left:0;padding-right:0">
+  <div class="about-copy">
+    <span id="aboutEyebrow" class="eyebrow-text">Sobre Raabta</span>
+    <h2 id="aboutTitle">Especialistas en realzar tu belleza natural</h2>
+    <p id="aboutBody">En Raabta Beauty Academy creamos un espacio dedicado a la mujer: cremas y cuidado de la piel, tratamientos de belleza especializados y la formación de nuevas profesionales. Atendemos en Los Olivos con cita previa.</p>
+    <a href="#contacto" class="btn-outline">Conócenos</a>
+  </div>
+  <div class="about-grid">
+    <img id="aboutImageBig" class="big" data-default="assets/gallery-1.webp" alt="Ambiente Raabta">
+    <div class="stack">
+      <img id="aboutImageSmall1" class="small1" data-default="assets/gallery-5.webp" alt="Trabajo de belleza Raabta">
+      <img id="aboutImageSmall2" class="small2" data-default="assets/gallery-4.webp" alt="Detalle de tratamiento">
+    </div>
+  </div>
+</section>
+
+<section class="testimonials wrap" style="padding-left:0;padding-right:0">
+  <div id="testimonialsGrid" class="testimonials-grid"></div>
+</section>
+
+<section class="why wrap" style="padding-left:0;padding-right:0">
+  <div class="why-head">
+    <div class="eyebrow"><span class="dot"></span>Por qué elegir Raabta</div>
+    <h2>Cuidado que prioriza<br>tu confianza</h2>
+  </div>
+
+  <div class="why-grid">
+    <div class="why-left">
+      <div class="compare">
+        <img id="afterImg" class="after" data-default="assets/after-treatment.webp" alt="Después del tratamiento">
+        <img id="beforeImg" class="before" data-default="assets/before-treatment.webp" alt="Antes del tratamiento">
+        <div class="compare-tag left">Antes</div>
+        <div class="compare-tag right">Después</div>
+        <div id="compareHandle" class="compare-handle"><div class="dot">↔</div></div>
+        <input id="compareRange" type="range" min="0" max="100" value="50" aria-label="Comparar antes y después">
+        <div class="compare-copy">
+          <h3>Resultados reales, clientas reales</h3>
+          <div class="meta"><span>🕐 Efecto 12–18 meses</span><span>✨ Microblading</span></div>
+        </div>
+      </div>
+
+      <a href="reserva.html" class="book-card">
+        <div class="book-card-icon">Cita</div>
+        <p>Agenda en minutos</p>
+        <h3>Reserva tu cita</h3>
+        <p class="sub">Confirma con un adelanto por WhatsApp</p>
+        <span class="cta">Reservar ahora</span>
+      </a>
+    </div>
+
+    <div class="why-right">
+      <div class="why-top-row">
+        <div class="hands-card">
+          <h3>Atención cercana y profesional</h3>
+          <img class="left-hand" src="assets/left-hand.webp" alt="">
+          <img class="right-hand" src="assets/right-hand.webp" alt="">
+        </div>
+        <div class="specialists-card">
+          <div>
+            <h3>Especialistas certificadas</h3>
+            <p>Cada tratamiento es guiado por profesionales formadas en Raabta.</p>
+          </div>
+          <div class="chips">
+            <span>Microblading</span>
+            <span>Micropigmentación</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="why-bottom-row">
+        <div class="why-bottom-left">
+          <div class="formation-card">
+            <div id="revolveWrap" class="bento-revolve"></div>
+            <div class="formation-copy">
+              <h3>Formación práctica personalizada</h3>
+              <p>Cada alumna practica a su ritmo con manual y supervisión</p>
+            </div>
+          </div>
+          <div class="video-card">
+            <div class="fade"></div>
+            <div class="caption"><h3>Técnicas actualizadas</h3></div>
+          </div>
+        </div>
+
+        <div class="marquee-card">
+          <div class="marquee-head">
+            <div class="stars">★★★★★</div>
+            <p>Nuestras clientas nos recomiendan</p>
+          </div>
+          <div class="marquee-viewport">
+            <div id="marqueeTrack" class="marquee-track bento-marquee"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="services wrap" style="padding-left:0;padding-right:0">
+  <div class="services-head">
+    <span>Salón</span>
+    <h2>Nuestros servicios más pedidos</h2>
+  </div>
+  <div id="servicesGrid" class="services-grid"></div>
+</section>
+
+<footer id="contacto">
+  <div class="footer-inner">
+    <div>
+      <img id="footerLogo" class="footer-logo" data-default="uploads/raabta-logo-color-primario.png" alt="Raabta">
+      <p id="footerTagline">Portal de belleza, salón y academia de formación para la mujer en Los Olivos, Lima.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Secciones</h4>
+      <a href="#belleza">Belleza</a>
+      <a href="salon.html">Salón</a>
+      <a href="academia.html">Academia</a>
+    </div>
+    <div class="footer-col">
+      <h4>Horario</h4>
+      <span>Lun–Sáb</span>
+      <span>8:00am–12:00pm</span>
+      <span>2:00pm–6:00pm</span>
+    </div>
+    <div class="footer-col">
+      <h4>Contacto</h4>
+      <a href="https://wa.me/51904719939?text=Hola%2C%20quisiera%20agendar%20una%20cita">WhatsApp: 904 719 939</a>
+      <a href="https://instagram.com/raabtabeautyacademy">@raabtabeautyacademy</a>
+      <span>Av. José Santos Chocano 1330, Los Olivos</span>
+      <span class="fine">RUC 20615670384</span>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-bottom-inner">© 2026 Raabta Beauty Academy · Todos los derechos reservados</div>
+  </div>
+</footer>
+
+<a href="https://wa.me/51904719939?text=Hola%2C%20quisiera%20agendar%20una%20cita" aria-label="WhatsApp 904 719 939" class="wa-fab">
+  <svg width="30" height="30" viewBox="0 0 24 24" fill="#fff"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5.1-1.3A10 10 0 1 0 12 2zm5.5 14.2c-.2.7-1.3 1.3-1.9 1.4-.5.1-1.1.1-1.8-.1-.4-.1-.9-.3-1.6-.6-2.9-1.2-4.7-4.1-4.9-4.3-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.4.2.5.7 1.8.8 1.9.1.1.1.3 0 .5s-.2.3-.3.5l-.5.6c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1.1 2.2 1.4 2.5 1.5.3.1.5.1.7-.1.2-.2.8-.9 1-1.2.2-.3.4-.3.7-.2.3.1 1.7.8 2 1 .3.2.5.2.6.4.1.1.1.7-.1 1.4z"></path></svg>
+</a>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="assets/catalog.js"></script>
+<script>
+// Fase 3: la tarjeta "Belleza" muestra el primer producto activo desde Supabase.
+// Fase 6: la imagen puede fijarse aparte desde Front > Tarjetas (site_content.belleza_image_url);
+// si esa queda vacía, se usa la foto del producto como antes.
+(async function initBelleza(){
+  const media = document.getElementById('bellezaMedia');
+  const desc = document.getElementById('bellezaDesc');
+  const name = document.getElementById('bellezaName');
+  const price = document.getElementById('bellezaPrice');
+  try {
+    const [products, siteContent] = await Promise.all([
+      fetchProducts(),
+      fetchSiteContent().catch(() => null),
+    ]);
+    const product = products[0];
+    if (!product) {
+      media.textContent = 'Próximamente';
+      desc.textContent = 'Estamos preparando nuestra línea de cuidado facial.';
+      return;
+    }
+    const imageUrl = (siteContent && siteContent.belleza_image_url) || product.image_url;
+    if (imageUrl) {
+      media.outerHTML = `<img src="${imageUrl}" alt="${product.name}" style="width:100%;height:210px;object-fit:cover">`;
+    } else {
+      media.textContent = `Foto: ${product.name}`;
+    }
+    desc.textContent = product.description;
+    name.textContent = product.name;
+    price.textContent = 'S/ ' + product.price;
+  } catch (e) {
+    media.textContent = 'No se pudo cargar';
+  }
+})();
+</script>
+<script>
+// Fase 5: hero, "sobre nosotros" y footer editables desde el panel admin.
+// Si el fetch falla, se queda con el texto hardcodeado que ya está en el HTML.
+//
+// Fase 6.1: las imágenes editables (logo, hero, sobre nosotros, comparador
+// antes/después) no traen "src" en el HTML — solo "data-default" con la
+// ruta de respaldo. Así el navegador nunca empieza a descargar la foto
+// vieja antes de saber si hay una subida desde el panel: se resuelve el
+// src una sola vez (elegida o de respaldo), sin el parpadeo de "sale la
+// anterior y después cambia" que salía al pisar un src ya cargado.
+(async function initSiteContent(){
+  function applyImages(c) {
+    const bySrc = {
+      headerLogo: c && c.logo_url,
+      footerLogo: c && c.logo_url,
+      heroImage: c && c.hero_image_url,
+      aboutImageBig: c && c.about_image_big,
+      aboutImageSmall1: c && c.about_image_small1,
+      aboutImageSmall2: c && c.about_image_small2,
+      beforeImg: c && c.compare_before_image,
+      afterImg: c && c.compare_after_image,
+    };
+    Object.keys(bySrc).forEach((id) => {
+      const el = document.getElementById(id);
+      el.src = bySrc[id] || el.dataset.default;
+    });
+  }
+  try {
+    const c = await fetchSiteContent();
+    applyImages(c);
+    if (c.logo_header_height) document.getElementById('headerLogo').style.height = c.logo_header_height + 'px';
+    if (c.logo_footer_height) document.getElementById('footerLogo').style.height = c.logo_footer_height + 'px';
+    document.getElementById('heroEyebrow').textContent = c.hero_eyebrow;
+    document.getElementById('heroTitle').textContent = c.hero_title;
+    document.getElementById('heroSubtitle').textContent = c.hero_subtitle;
+    document.getElementById('aboutEyebrow').textContent = c.about_eyebrow;
+    document.getElementById('aboutTitle').textContent = c.about_title;
+    document.getElementById('aboutBody').textContent = c.about_body;
+    if (c.salon_image_url) {
+      const salonMedia = document.getElementById('salonMedia');
+      salonMedia.outerHTML = `<img src="${c.salon_image_url}" alt="Servicios de belleza" class="card-media" style="width:100%;height:210px;object-fit:cover">`;
+    }
+    if (c.academia_image_url) {
+      const academiaMedia = document.getElementById('academiaMedia');
+      academiaMedia.outerHTML = `<img src="${c.academia_image_url}" alt="Cursos certificados" class="card-media" style="width:100%;height:210px;object-fit:cover">`;
+    }
+    document.getElementById('footerTagline').textContent = c.footer_tagline;
+  } catch (e) {
+    // se queda con el texto hardcodeado del HTML; las imágenes caen a data-default
+    applyImages(null);
+  }
+})();
+</script>
+<script>
+(function(){
+  const STAR_SVG = '<svg width="14" height="14" viewBox="0 0 24 24" fill="#a47234"><path d="M12 2l2.4 7.2H22l-6 4.6 2.3 7.2-6.3-4.5-6.3 4.5L8 13.8 2 9.2h7.6z"></path></svg>';
+
+  // cart counter
+  let cartCount = 0;
+  const cartBadge = document.getElementById('cartBadge');
+  document.getElementById('cartBtn').addEventListener('click', () => {
+    cartCount++;
+    cartBadge.textContent = cartCount;
+    cartBadge.classList.toggle('hidden', cartCount === 0);
+  });
+
+  // hero wheel: 18 pills rotating around the hero frame
+  const wheelItems = [
+    ["Microblading","assets/avatar-1.webp"], ["Micropigmentación de cejas","assets/avatar-2.webp"],
+    ["Depilación","assets/avatar-3.webp"], ["Faciales","assets/avatar-4.webp"],
+    ["Rejuvenecimiento facial","assets/avatar-5.webp"], ["Delineado de ojo","assets/avatar-6.webp"],
+    ["Hidralips","assets/avatar-7.webp"], ["Planing","assets/avatar-8.webp"],
+    ["Manicure","assets/avatar-9.webp"], ["Pedicure","assets/avatar-1.webp"],
+    ["Lifting de pestañas","assets/avatar-2.webp"], ["Henna","assets/avatar-3.webp"],
+    ["Academia Raabta","assets/avatar-4.webp"], ["Cursos certificados","assets/avatar-5.webp"],
+    ["Cremas faciales","assets/avatar-6.webp"], ["Cuidado de piel","assets/avatar-7.webp"],
+    ["Insumos microblading","assets/avatar-8.webp"], ["Belleza natural","assets/avatar-9.webp"]
+  ];
+  const wheelWrap = document.getElementById('wheelWrap');
+  wheelItems.forEach(([label, avatar], i) => {
+    const angle = i * 20;
+    const textFlip = angle <= 180 ? 180 : 0;
+    const pill = document.createElement('div');
+    pill.className = 'wheel-pill';
+    pill.style.transform = `translate(-50%,-50%) rotate(${angle}deg) translateY(-210px)`;
+    pill.innerHTML = `
+      <div class="wheel-pill-inner">
+        <div class="wheel-pill-avatar"><img src="${avatar}" alt=""></div>
+        <span class="wheel-pill-label" style="transform:rotate(${textFlip}deg)">${label}</span>
+      </div>`;
+    wheelWrap.appendChild(pill);
+  });
+
+  // testimonials — datos reales desde Supabase (Fase 5), con estos como
+  // respaldo si el fetch falla.
+  const fallbackTestimonials = [
+    { avatar_url: "assets/avatar-1.webp", name: "María F.", service: "Microblading", quote: "Quedé encantada con mis cejas. El trabajo es muy natural y la atención de primera." },
+    { avatar_url: "assets/avatar-2.webp", name: "Karla T.", service: "Curso Microblading básico", quote: "El curso mixto me permitió practicar en el local y repasar con las clases grabadas." },
+    { avatar_url: "assets/avatar-3.webp", name: "Daniela R.", service: "Micropigmentación de labios", quote: "Resultado precioso y duradero. El adelanto para reservar da seguridad a ambas partes." },
+    { avatar_url: "assets/avatar-4.webp", name: "Sofía L.", service: "Cuidado facial", quote: "Las cremas son de excelente calidad y el pago contra entrega me dio confianza." }
+  ];
+  const testimonialsGrid = document.getElementById('testimonialsGrid');
+  function renderTestimonials(list){
+    testimonialsGrid.innerHTML = '';
+    list.forEach(t => {
+      const card = document.createElement('div');
+      card.className = 't-card';
+      card.innerHTML = `
+        <div class="t-stars">${STAR_SVG.repeat(5)}</div>
+        <p class="t-quote">${t.quote}</p>
+        <div class="t-who">
+          <img src="${t.avatar_url}" alt="${t.name}">
+          <div>
+            <div class="t-name">${t.name}</div>
+            <div class="t-service">${t.service}</div>
+          </div>
+        </div>`;
+      testimonialsGrid.appendChild(card);
+    });
+  }
+  fetchTestimonials().then(renderTestimonials).catch(() => renderTestimonials(fallbackTestimonials));
+
+  // before/after slider
+  const compareRange = document.getElementById('compareRange');
+  const compareParent = compareRange.closest('.compare');
+  compareRange.addEventListener('input', () => {
+    compareParent.style.setProperty('--pos', compareRange.value + '%');
+  });
+
+  // revolving academy avatars
+  const revolveAvatars = ["assets/avatar-1.webp","assets/avatar-2.webp","assets/avatar-3.webp","assets/avatar-4.webp","assets/avatar-5.webp","assets/avatar-6.webp"];
+  const revolveWrap = document.getElementById('revolveWrap');
+  revolveAvatars.forEach((src, i) => {
+    const angle = i * 60;
+    const item = document.createElement('div');
+    item.className = 'bento-revolve-item';
+    item.style.transform = `rotate(${angle}deg) translateY(-56px)`;
+    item.innerHTML = `<div class="bento-counter" style="transform:rotate(${-angle}deg)"><img src="${src}" alt=""></div>`;
+    revolveWrap.appendChild(item);
+  });
+
+  // marquee testimonials (list duplicated for seamless vertical loop)
+  const marqueeBase = [
+    { name: "María F.", avatar: "assets/avatar-1.webp", quote: "Quedé encantada con mis cejas. El trabajo es muy natural." },
+    { name: "Karla T.", avatar: "assets/avatar-2.webp", quote: "El curso mixto me permitió practicar en el local y en casa." },
+    { name: "Daniela R.", avatar: "assets/avatar-3.webp", quote: "Resultado precioso y duradero, muy buena atención." },
+    { name: "Sofía L.", avatar: "assets/avatar-4.webp", quote: "Las cremas son de excelente calidad y llegaron rápido." }
+  ];
+  const marqueeTestimonials = [...marqueeBase, ...marqueeBase];
+  const marqueeTrack = document.getElementById('marqueeTrack');
+  marqueeTestimonials.forEach(mt => {
+    const card = document.createElement('div');
+    card.className = 'mt-card';
+    card.innerHTML = `
+      <div class="stars">★★★★★</div>
+      <p>${mt.quote}</p>
+      <div class="row">
+        <div class="name">${mt.name}</div>
+        <img src="${mt.avatar}" alt="">
+      </div>`;
+    marqueeTrack.appendChild(card);
+  });
+
+  // featured services
+  const featuredServices = [
+    { image: "assets/service-1.webp", name: "Microblading", price: "S/ 250" },
+    { image: "assets/service-2.webp", name: "Micropigmentación de cejas", price: "S/ 450" },
+    { image: "assets/service-8.webp", name: "Micropigmentación de labios", price: "S/ 550" },
+    { image: "assets/service-11.webp", name: "Delineado de ojo", price: "S/ 180" },
+    { image: "assets/service-14.webp", name: "Hidralips", price: "S/ 180" }
+  ];
+  const servicesGrid = document.getElementById('servicesGrid');
+  featuredServices.forEach(fs => {
+    const a = document.createElement('a');
+    a.href = 'reserva.html';
+    a.className = 'service-card';
+    a.innerHTML = `
+      <img src="${fs.image}" alt="${fs.name}">
+      <div class="service-card-body">
+        <div class="service-card-name">${fs.name}</div>
+        <div class="service-card-price">${fs.price}</div>
+      </div>`;
+    servicesGrid.appendChild(a);
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mis citas — Raabta Beauty Academy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Hedvig+Letters+Serif:opsz@12..24&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{ --bg:#fdf7ef; --ink:#3f3126; --brown:#633b2c; --gold:#a47234; --cream:#f7ecdf; --muted:#7a685d; --line:#f0e4d3; --border:#ecdcc6; --serif:'Hedvig Letters Serif',serif; }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:'Open Sans',sans-serif;background:var(--bg);color:var(--ink)}
+  a{color:#986a3e;text-decoration:none}
+  a:hover{color:var(--brown)}
+  h1,h2,h3{font-family:var(--serif);font-weight:400;color:var(--brown);margin:0}
+  button{font-family:inherit}
+  header{position:sticky;top:0;z-index:50;background:rgba(253,247,239,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+  .header-inner{max-width:1180px;margin:0 auto;padding:14px 32px;display:flex;align-items:center;justify-content:space-between;gap:24px}
+  nav{display:flex;gap:8px;align-items:center}
+  nav a{padding:10px 16px;border-radius:999px;font-size:14px;font-weight:600;color:var(--brown)}
+  nav a:hover{background:var(--cream)}
+  nav a.current{font-weight:700;color:#fff;background:var(--gold)}
+  nav a.current:hover{color:#fff}
+  .wrap{max-width:1180px;margin:0 auto;padding:36px 32px 90px}
+  .citas-grid{display:grid;grid-template-columns:340px 1fr;gap:28px;align-items:start}
+  @media (max-width:860px){ .citas-grid{grid-template-columns:1fr} }
+  .appt-row{display:flex;gap:12px;align-items:center;text-align:left;width:100%;box-sizing:border-box;background:#fff;border:1.5px solid var(--line);border-radius:16px;padding:12px;margin-bottom:12px;cursor:pointer}
+  .appt-row.selected{border-color:var(--gold)}
+  .appt-thumb{width:56px;height:56px;border-radius:12px;flex-shrink:0}
+  .quick-row{display:flex;align-items:center;justify-content:space-between;padding:15px 0;border-bottom:1px solid var(--line);cursor:pointer}
+  .manage-btn{display:flex;align-items:center;justify-content:space-between;background:none;border:none;border-bottom:1px solid var(--line);padding:13px 0;cursor:pointer;text-align:left;width:100%}
+  .modal-backdrop{position:fixed;inset:0;background:rgba(63,49,38,.4);z-index:80;display:none;align-items:center;justify-content:center}
+  .modal-backdrop.show{display:flex}
+  .modal-card{background:#fff;border-radius:22px;padding:30px;width:420px;max-width:90vw;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <img src="uploads/raabta-logo-color-primario.png" alt="Raabta Beauty Academy" style="height:50px;width:auto">
+    <nav>
+      <a href="index.html">Inicio</a>
+      <a href="index.html#belleza">Belleza</a>
+      <a href="salon.html" class="current">Salón</a>
+      <a href="academia.html">Academia</a>
+    </nav>
+  </div>
+</header>
+
+<section class="wrap">
+  <h1 style="font-size:34px;margin:0 0 26px">Mis citas</h1>
+  <div class="citas-grid">
+    <div id="listCol"></div>
+    <div id="detailCol" style="background:#fff;border-radius:24px;overflow:hidden;box-shadow:0 10px 40px rgba(99,59,44,.08)"></div>
+  </div>
+</section>
+
+<div class="modal-backdrop" id="cancelBackdrop">
+  <div class="modal-card">
+    <h3 style="font-size:24px;margin:0 0 16px">¿Seguro que quieres cancelar?</h3>
+    <div id="cancelSummary" style="display:flex;gap:12px;align-items:center;background:var(--bg);border-radius:14px;padding:12px"></div>
+    <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:22px">
+      <button style="background:none;border:1.5px solid var(--border);color:var(--brown);padding:11px 20px;border-radius:999px;font-size:13.5px;font-weight:600;cursor:pointer" onclick="closeCancelConfirm()">Volver</button>
+      <button style="background:#b23b3b;color:#fff;border:none;padding:11px 20px;border-radius:999px;font-size:13.5px;font-weight:700;cursor:pointer" onclick="confirmCancel()">Sí, cancelar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const APPOINTMENTS = [
+  { id: "up1", name: "Delineado de ojo", dateLabel: "sáb, 15 ago 2026 a las 8:00", duration: "1 h de duración", price: 180, gradient: "linear-gradient(135deg,#e0a86f,#8a5a34)", confirmed: true, canManage: true, ref: "5F6D93A8", upcoming: true },
+  { id: "h1", name: "Microblading", dateLabel: "sáb, 25 jul 2026 a las 10:00", duration: "2 h de duración", price: 250, gradient: "linear-gradient(135deg,#cfa877,#7a4a24)", confirmed: true, canManage: false, ref: "3A19C0F2", upcoming: false },
+  { id: "h2", name: "Manicure", dateLabel: "lun, 9 mar 2026 a las 16:30", duration: "1 h de duración", price: 80, gradient: "linear-gradient(135deg,#e8d3b8,#c39a63)", confirmed: true, canManage: false, ref: "9B2E71D4", upcoming: false },
+  { id: "h3", name: "Lifting de pestañas", dateLabel: "mar, 17 feb 2026 a las 17:15", duration: "1 h de duración", price: 80, gradient: "linear-gradient(135deg,#f0dcc0,#d8b98c)", confirmed: true, canManage: false, ref: "1D4F82A0", upcoming: false }
+];
+
+const state = { selectedId: "up1", cancelledIds: [], cancelConfirmOpen: false };
+
+function withStatus(a){ return { ...a, cancelled: state.cancelledIds.includes(a.id), confirmed: a.confirmed && !state.cancelledIds.includes(a.id) }; }
+function selectAppt(id){ state.selectedId = id; render(); }
+function openCancelConfirm(){ state.cancelConfirmOpen = true; render(); }
+function closeCancelConfirm(){ state.cancelConfirmOpen = false; render(); }
+function confirmCancel(){ state.cancelledIds.push(state.selectedId); state.cancelConfirmOpen = false; render(); }
+
+function render(){
+  const list = APPOINTMENTS.map(withStatus);
+  const upcoming = list.filter(a => a.upcoming);
+  const history = list.filter(a => !a.upcoming);
+  const selected = list.find(a => a.id === state.selectedId) || list[0];
+
+  function rowHtml(a){
+    return `<button class="appt-row ${state.selectedId === a.id ? 'selected' : ''}" onclick="selectAppt('${a.id}')">
+      <div class="appt-thumb" style="background:${a.gradient}"></div>
+      <div>
+        <div style="font-size:14px;font-weight:700;color:var(--ink)">${a.name}</div>
+        <div style="font-size:12.5px;color:var(--muted);margin-top:2px">${a.dateLabel}</div>
+        <div style="font-size:12.5px;color:var(--muted)">PEN ${a.price} · 1 artículo</div>
+      </div>
+    </button>`;
+  }
+
+  let listHtml = '<h3 style="font-size:12.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin:0 0 12px">Próximas</h3>';
+  listHtml += upcoming.map(rowHtml).join('') || '<p style="font-size:13.5px;color:var(--muted)">No tienes citas próximas.</p>';
+  listHtml += '<h3 style="font-size:12.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin:22px 0 12px">Historial</h3>';
+  listHtml += history.map(rowHtml).join('');
+  document.getElementById('listCol').innerHTML = listHtml;
+
+  const statusBg = selected.cancelled ? '#f6e3e3' : 'var(--cream)';
+  const statusColor = selected.cancelled ? '#b23b3b' : 'var(--gold)';
+  const quickActions = [
+    { icon: "📅", label: "Añadir al calendario" },
+    { icon: "📍", label: "Cómo llegar" },
+    { icon: "💬", label: "Escribe un mensaje" }
+  ];
+
+  let detailHtml = `<div style="height:220px;background:${selected.gradient};position:relative;display:flex;align-items:flex-end;padding:24px">
+    <h2 style="font-size:30px;color:#fff;margin:0;text-shadow:0 2px 12px rgba(0,0,0,.25)">${selected.name}</h2>
+  </div>
+  <div style="padding:28px 30px">
+    <span style="display:inline-flex;align-items:center;gap:6px;background:${statusBg};color:${statusColor};padding:7px 16px;border-radius:999px;font-size:13px;font-weight:700;margin-bottom:18px">
+      ${selected.cancelled ? '✕ Cancelada' : '✓ Confirmada'}
+    </span>
+    <h3 style="font-size:23px;font-weight:700;color:var(--ink);margin:0 0 6px;font-family:'Open Sans',sans-serif">${selected.dateLabel}</h3>
+    <p style="font-size:13.5px;color:var(--muted);margin:0 0 24px">${selected.duration}</p>
+    <div style="display:flex;flex-direction:column;border-top:1px solid var(--line)">`;
+  quickActions.forEach(q => {
+    detailHtml += `<div class="quick-row">
+      <div style="display:flex;align-items:center;gap:14px">
+        <div style="width:34px;height:34px;border-radius:999px;background:var(--cream);display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--gold)">${q.icon}</div>
+        <span style="font-size:14.5px;font-weight:600;color:var(--ink)">${q.label}</span>
+      </div>
+      <span style="color:#c9b8a3">›</span>
+    </div>`;
+  });
+  detailHtml += `</div>
+    <div style="display:flex;justify-content:space-between;padding:18px 0;border-bottom:1px solid var(--line)">
+      <span style="font-size:15px;font-weight:700;color:var(--brown)">Total</span>
+      <span style="font-size:16px;font-weight:700;color:var(--gold)">PEN ${selected.price}</span>
+    </div>
+    <h3 style="font-size:15px;font-weight:700;color:var(--brown);margin:22px 0 8px;font-family:'Open Sans',sans-serif">Más detalles</h3>
+    <div style="font-size:13.5px;font-weight:600;color:var(--ink);margin-bottom:2px">Política de cancelación</div>
+    <p style="font-size:13.5px;color:var(--muted);margin:0 0 16px">Por favor, cancela con al menos 30 minutos de antelación.</p>`;
+
+  if (selected.canManage) {
+    detailHtml += `<div style="display:flex;flex-direction:column">
+      <button class="manage-btn"><span style="font-size:14.5px;font-weight:600;color:var(--ink)">Cambiar cita</span><span style="color:#c9b8a3">›</span></button>
+      <button class="manage-btn" style="border-bottom:none" onclick="openCancelConfirm()"><span style="font-size:14.5px;font-weight:600;color:#b23b3b">Cancelar cita</span><span style="color:#c9b8a3">›</span></button>
+    </div>`;
+  }
+
+  detailHtml += `<h3 style="font-size:15px;font-weight:700;color:var(--brown);margin:24px 0 12px;font-family:'Open Sans',sans-serif">Cómo llegar</h3>
+    <div style="height:180px;border-radius:16px;background:linear-gradient(135deg,#e9dcc8,#cbb08a);display:flex;align-items:center;justify-content:center;color:#7a4a24;font-size:13px;font-weight:600;margin-bottom:12px">Mapa: Av. José Santos Chocano 1330</div>
+    <p style="font-size:13.5px;color:var(--muted);margin:0">Av. José Santos Chocano 1330, Los Olivos, Lima. <a href="https://wa.me/51904719939">Cómo llegar</a></p>
+    <p style="font-size:12px;color:#c9b8a3;margin:18px 0 0">Referencia de la reserva ${selected.ref}</p>
+  </div>`;
+  document.getElementById('detailCol').innerHTML = detailHtml;
+
+  document.getElementById('cancelBackdrop').classList.toggle('show', state.cancelConfirmOpen);
+  document.getElementById('cancelSummary').innerHTML = `
+    <div style="width:48px;height:48px;border-radius:10px;background:${selected.gradient};flex-shrink:0"></div>
+    <div><div style="font-size:14px;font-weight:700;color:var(--ink)">${selected.name}</div><div style="font-size:12.5px;color:var(--muted)">${selected.dateLabel}</div></div>`;
+}
+
+render();
+</script>
+</body>
+</html>
