@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Mis citas — Raabta Beauty Academy</title>
+<title>Mis citas — Cieza Barber Studio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Hedvig+Letters+Serif:opsz@12..24&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root{ --bg:#fdf7ef; --ink:#3f3126; --brown:#633b2c; --gold:#a47234; --cream:#f7ecdf; --muted:#7a685d; --line:#f0e4d3; --border:#ecdcc6; --serif:'Hedvig Letters Serif',serif; }
+  :root{ --bg:#f5f3f0; --ink:#1a1a1a; --brown:#1a1a1a; --gold:#b5723c; --cream:#eeeae4; --muted:#6b6b68; --line:#e5e1da; --border:#ddd8cf; --serif:'Hedvig Letters Serif',serif; }
   *{box-sizing:border-box}
   body{margin:0;font-family:'Open Sans',sans-serif;background:var(--bg);color:var(--ink)}
   a{color:#986a3e;text-decoration:none}
@@ -38,12 +38,11 @@
 
 <header>
   <div class="header-inner">
-    <img src="uploads/raabta-logo-color-primario.png" alt="Raabta Beauty Academy" style="height:50px;width:auto">
+    <span style="font-family:var(--serif);font-size:22px;font-weight:600;color:var(--brown)">Cieza Barber</span>
     <nav>
       <a href="index.html">Inicio</a>
-      <a href="index.html#belleza">Belleza</a>
-      <a href="salon.html" class="current">Salón</a>
-      <a href="academia.html">Academia</a>
+      <a href="index.html#belleza">Productos</a>
+      <a href="salon.html" class="current">Servicios</a>
     </nav>
   </div>
 </header>
@@ -69,10 +68,10 @@
 
 <script>
 const APPOINTMENTS = [
-  { id: "up1", name: "Delineado de ojo", dateLabel: "sáb, 15 ago 2026 a las 8:00", duration: "1 h de duración", price: 180, gradient: "linear-gradient(135deg,#e0a86f,#8a5a34)", confirmed: true, canManage: true, ref: "5F6D93A8", upcoming: true },
-  { id: "h1", name: "Microblading", dateLabel: "sáb, 25 jul 2026 a las 10:00", duration: "2 h de duración", price: 250, gradient: "linear-gradient(135deg,#cfa877,#7a4a24)", confirmed: true, canManage: false, ref: "3A19C0F2", upcoming: false },
-  { id: "h2", name: "Manicure", dateLabel: "lun, 9 mar 2026 a las 16:30", duration: "1 h de duración", price: 80, gradient: "linear-gradient(135deg,#e8d3b8,#c39a63)", confirmed: true, canManage: false, ref: "9B2E71D4", upcoming: false },
-  { id: "h3", name: "Lifting de pestañas", dateLabel: "mar, 17 feb 2026 a las 17:15", duration: "1 h de duración", price: 80, gradient: "linear-gradient(135deg,#f0dcc0,#d8b98c)", confirmed: true, canManage: false, ref: "1D4F82A0", upcoming: false }
+  { id: "up1", name: "Corte + barba", dateLabel: "sáb, 15 ago 2026 a las 8:00", duration: "45 min de duración", price: 45, gradient: "linear-gradient(135deg,#b5723c,#3a3a3a)", confirmed: true, canManage: true, ref: "5F6D93A8", upcoming: true },
+  { id: "h1", name: "Corte clásico", dateLabel: "sáb, 25 jul 2026 a las 10:00", duration: "30 min de duración", price: 25, gradient: "linear-gradient(135deg,#96591f,#1a1a1a)", confirmed: true, canManage: false, ref: "3A19C0F2", upcoming: false },
+  { id: "h2", name: "Afeitado clásico", dateLabel: "lun, 9 mar 2026 a las 16:30", duration: "30 min de duración", price: 20, gradient: "linear-gradient(135deg,#d9a06a,#7a4a24)", confirmed: true, canManage: false, ref: "9B2E71D4", upcoming: false },
+  { id: "h3", name: "Diseño de barba", dateLabel: "mar, 17 feb 2026 a las 17:15", duration: "30 min de duración", price: 20, gradient: "linear-gradient(135deg,#c98f52,#5c3a22)", confirmed: true, canManage: false, ref: "1D4F82A0", upcoming: false }
 ];
 
 const state = { selectedId: "up1", cancelledIds: [], cancelConfirmOpen: false };
@@ -150,8 +149,8 @@ function render(){
   }
 
   detailHtml += `<h3 style="font-size:15px;font-weight:700;color:var(--brown);margin:24px 0 12px;font-family:'Open Sans',sans-serif">Cómo llegar</h3>
-    <div style="height:180px;border-radius:16px;background:linear-gradient(135deg,#e9dcc8,#cbb08a);display:flex;align-items:center;justify-content:center;color:#7a4a24;font-size:13px;font-weight:600;margin-bottom:12px">Mapa: Av. José Santos Chocano 1330</div>
-    <p style="font-size:13.5px;color:var(--muted);margin:0">Av. José Santos Chocano 1330, Los Olivos, Lima. <a href="https://wa.me/51904719939">Cómo llegar</a></p>
+    <div style="height:180px;border-radius:16px;background:linear-gradient(135deg,#3a3a3a,#1a1a1a);display:flex;align-items:center;justify-content:center;color:#d9a06a;font-size:13px;font-weight:600;margin-bottom:12px">Mapa: Jr. Manuel Gonzales Prada 875</div>
+    <p style="font-size:13.5px;color:var(--muted);margin:0">Jr. Manuel Gonzales Prada 875, Los Olivos, Lima. <a href="https://wa.me/51914851374">Cómo llegar</a></p>
     <p style="font-size:12px;color:#c9b8a3;margin:18px 0 0">Referencia de la reserva ${selected.ref}</p>
   </div>`;
   document.getElementById('detailCol').innerHTML = detailHtml;

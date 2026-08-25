@@ -2,8 +2,8 @@
 // de arreglos hardcodeados en cada página. Compartido por reserva.html, salon.html
 // e index.html.
 const SUPABASE_CONFIG = {
-  url: "https://bowlmookhezvwwxofqoe.supabase.co",
-  anonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJvd2xtb29raGV6dnd3eG9mcW9lIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY5NzQzMzAsImV4cCI6MjEwMjU1MDMzMH0.EZw0fuT8o0qCrFYbiegoN46VXBrkXRcUmDL37gBHqGs"
+  url: "https://ktlfynjszkdyucgeqhut.supabase.co",
+  anonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt0bGZ5bmpzemtkeXVjZ2VxaHV0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc0NTE2OTQsImV4cCI6MjEwMzAyNzY5NH0.iVhmx67EOMyB5-MnCvq80rJb3utVNw8gNnfcSm3SzCY"
 };
 const catalogClient = supabase.createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey);
 
@@ -66,16 +66,6 @@ async function fetchSiteContent() {
 async function fetchTestimonials() {
   const { data, error } = await catalogClient
     .from("testimonials")
-    .select("*")
-    .eq("active", true)
-    .order("sort_order");
-  if (error) throw error;
-  return data;
-}
-
-async function fetchCourses() {
-  const { data, error } = await catalogClient
-    .from("courses")
     .select("*")
     .eq("active", true)
     .order("sort_order");

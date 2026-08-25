@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Reservar cita — Raabta Beauty Academy</title>
+<title>Reservar cita — Cieza Barber Studio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Hedvig+Letters+Serif:opsz@12..24&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root{ --bg:#fdf7ef; --ink:#3f3126; --brown:#633b2c; --gold:#a47234; --cream:#f7ecdf; --muted:#7a685d; --line:#f0e4d3; --border:#ecdcc6; --serif:'Hedvig Letters Serif',serif; }
+  :root{ --bg:#f5f3f0; --ink:#1a1a1a; --brown:#1a1a1a; --gold:#b5723c; --cream:#eeeae4; --muted:#6b6b68; --line:#e5e1da; --border:#ddd8cf; --serif:'Hedvig Letters Serif',serif; }
   *{box-sizing:border-box}
   body{margin:0;font-family:'Open Sans',sans-serif;background:var(--bg);color:var(--ink)}
   a{color:#986a3e;text-decoration:none}
@@ -57,7 +57,7 @@
   .btn{background:var(--gold);color:#fff;border:none;padding:13px 18px;border-radius:999px;font-size:14px;font-weight:700;cursor:pointer}
   .btn:disabled{opacity:.5;cursor:not-allowed}
   .btn-outline{background:none;border:1.5px solid var(--border);color:var(--brown);padding:13px 18px;border-radius:999px;font-size:14px;font-weight:600;cursor:pointer}
-  .overlay{position:fixed;inset:0;z-index:90;display:none;align-items:center;justify-content:center;background:radial-gradient(circle at 30% 20%,#f0c98a,#a47234 45%,#5c3a22 100%);background-size:200% 200%;animation:bgDrift 8s ease-in-out infinite alternate}
+  .overlay{position:fixed;inset:0;z-index:90;display:none;align-items:center;justify-content:center;background:radial-gradient(circle at 30% 20%,#f0c98a,#b5723c 45%,#5c3a22 100%);background-size:200% 200%;animation:bgDrift 8s ease-in-out infinite alternate}
   .overlay.show{display:flex}
   @keyframes bgDrift{0%{background-position:0% 0%}100%{background-position:100% 100%}}
   @keyframes confettiZoom{0%{opacity:0;transform:scale(.7)}60%{opacity:1;transform:scale(1.03)}100%{opacity:1;transform:scale(1)}}
@@ -71,12 +71,11 @@
 
 <header>
   <div class="header-inner">
-    <img src="uploads/raabta-logo-color-primario.png" alt="Raabta Beauty Academy" style="height:50px;width:auto">
+    <span style="font-family:var(--serif);font-size:22px;font-weight:600;color:var(--brown)">Cieza Barber</span>
     <nav>
       <a href="index.html">Inicio</a>
-      <a href="index.html#belleza">Belleza</a>
-      <a href="salon.html" class="current">Salón</a>
-      <a href="academia.html">Academia</a>
+      <a href="index.html#belleza">Productos</a>
+      <a href="salon.html" class="current">Servicios</a>
     </nav>
   </div>
 </header>
@@ -113,7 +112,7 @@
 // motor que usa WhatsApp), no por un insert directo a Supabase — así una
 // reserva web y una por WhatsApp compiten por el mismo horario de verdad,
 // en vez de vivir en dos tablas que nunca se enteran una de la otra.
-const BOT_API_URL = "https://bot.raabtastudio.com";
+const BOT_API_URL = "https://bot.ciezabarber.com";
 const supabaseClient = catalogClient;
 
 // Fase 3: se carga de forma async desde Supabase (ver init() al final del archivo).
@@ -342,7 +341,7 @@ function renderStep3(){
     { key: "si", title: "Sí", subtitle: "Esta es mi primera visita" },
     { key: "no", title: "No", subtitle: "No es mi primera visita" }
   ];
-  let html = '<h1 style="font-size:32px">¿Es tu primera visita a Raabta Beauty Academy?</h1><div style="display:flex;flex-direction:column;gap:14px;max-width:520px;margin-top:24px">';
+  let html = '<h1 style="font-size:32px">¿Es tu primera visita a Cieza Barber Studio?</h1><div style="display:flex;flex-direction:column;gap:14px;max-width:520px;margin-top:24px">';
   opts.forEach(o => {
     html += `<button class="fv-btn ${state.firstVisit === o.key ? 'selected' : ''}" onclick="selectFirstVisit('${o.key}')">
       <div class="fv-title">${o.title}</div><div class="fv-sub">${o.subtitle}</div>
@@ -405,10 +404,10 @@ function renderSidebar(){
 
   let html = `<div class="aside-box">
     <div style="display:flex;align-items:center;gap:12px">
-      <img src="uploads/raabta-logo-color-primario.png" style="width:44px;height:44px;object-fit:contain;background:var(--bg);border-radius:12px;padding:4px">
+      <div style="width:44px;height:44px;flex-shrink:0;background:var(--brown);border-radius:12px;display:flex;align-items:center;justify-content:center;color:var(--gold-light,var(--gold));font-family:var(--serif);font-size:19px">C</div>
       <div>
-        <div style="font-size:14.5px;font-weight:700;color:var(--brown)">Raabta Beauty Academy</div>
-        <div style="font-size:12px;color:var(--muted)">Av. José Santos Chocano 1330, Los Olivos</div>
+        <div style="font-size:14.5px;font-weight:700;color:var(--brown)">Cieza Barber Studio</div>
+        <div style="font-size:12px;color:var(--muted)">Jr. Manuel Gonzales Prada 875, Los Olivos</div>
       </div>
     </div>
     <div class="aside-hr"></div>`;
