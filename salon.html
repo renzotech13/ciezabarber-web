@@ -86,7 +86,7 @@
       <a href="salon.html" class="current">Servicios</a>
       <a href="index.html#contacto">Contacto</a>
     </nav>
-    <a href="reserva.html" class="btn">Reservar cita</a>
+    <a href="index.html#reservar" class="btn">Reservar cita</a>
   </div>
 </header>
 
@@ -95,7 +95,7 @@
   <h1>Cortes y cuidado para el hombre moderno</h1>
   <p>Cortes clásicos, fade, barba y afeitado. Toca cada categoría para ver el detalle y las fotos del servicio.</p>
   <div class="hero-actions">
-    <a href="reserva.html" class="btn">Reservar cita</a>
+    <a href="index.html#reservar" class="btn">Reservar cita</a>
     <a href="index.html#contacto" class="btn-outline">Hablar por WhatsApp</a>
   </div>
 </section>
@@ -158,7 +158,7 @@ function renderAccordion(){
         </div>
         <div class="acc-desc-col">
           <p class="acc-desc">${c.desc}</p>
-          <a href="reserva.html?services=${c.services.join(',')}&step=2" class="acc-detail-btn" onclick="event.stopPropagation()">Reservar</a>
+          <a href="index.html?servicios=${c.services.join(',')}#reservar" class="acc-detail-btn" onclick="event.stopPropagation()">Reservar</a>
         </div>
         <span class="acc-plusminus">${i === 0 ? '−' : '+'}</span>
       </button>
