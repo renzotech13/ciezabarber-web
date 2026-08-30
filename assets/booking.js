@@ -105,11 +105,8 @@
           nombre: state.nombre.trim(),
           telefono: normalizarTelefono(state.telefono.trim()),
           primera_visita: state.firstVisit === "si" ? true : state.firstVisit === "no" ? false : null,
-          // El bot todavía no tiene una columna propia para el barbero
-          // elegido — se antepone al comentario para que quede visible en
-          // el panel de citas sin perder la preferencia del cliente.
-          comentario: [barbero ? `Barbero preferido: ${barbero.nombre}.` : null, state.comentario || null]
-            .filter(Boolean).join(" ") || undefined
+          comentario: state.comentario || undefined,
+          ...(barbero ? { barbero: barbero.nombre } : {})
         })
       });
       if (res.status === 409) {
