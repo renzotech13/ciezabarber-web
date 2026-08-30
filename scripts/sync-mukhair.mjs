@@ -99,6 +99,12 @@ for (const f of await readdir(join(RAIZ, "assets/productos"))) {
   if (!usados.has(f)) { await unlink(join(RAIZ, "assets/productos", f)); console.log(`  eliminada ${f}`); }
 }
 
+// Las ceras/barros/gominas de peinado (potes individuales de "Cuidado del
+// hombre") son lo primero que la barbería quiere mostrar en la vitrina —
+// van antes que los dúos/tríos/ofertas en combo, que igual siguen listados.
+const esCeraDePeinado = (p) => p.tags.includes("hombre") && p.tags.includes("estilismo") && !p.tags.includes("packs");
+productos.sort((a, b) => Number(esCeraDePeinado(b)) - Number(esCeraDePeinado(a)));
+
 const cabecera = `// Catálogo MUK Hair Perú — Cieza Barber Studio es distribuidor autorizado.
 // Generado por scripts/sync-mukhair.mjs desde la tienda oficial del proveedor.
 // No editar a mano: correr el script cuando cambien precios o productos.

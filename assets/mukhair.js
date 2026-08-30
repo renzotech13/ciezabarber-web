@@ -13,6 +13,118 @@ var MUK_FILTROS = [
 
 var MUK_PRODUCTOS = [
  {
+  "id": "8952",
+  "slug": "savage-muk-barro-para-peinado",
+  "nombre": "Savage MUK Barro para Peinado",
+  "linea": "Savage",
+  "precio": 75,
+  "precio_lista": 75,
+  "oferta": false,
+  "tags": [
+   "estilismo",
+   "hombre"
+  ],
+  "img": "assets/productos/savage-muk-barro-para-peinado.webp",
+  "desc": "Fijación salvaje. Acabado semi mate con brillo. Fijación flexible. Resistente a la humedad. No se descascarilla. Soluble en agua. Fragancia de piel de mandarina.",
+  "url": "https://www.mukhairperu.com/pe/product/savage-muk-barro-para-peinado/"
+ },
+ {
+  "id": "8884",
+  "slug": "dry-muk-crema-de-peinado",
+  "nombre": "Dry MUK Crema de Peinado",
+  "linea": "Dry",
+  "precio": 75,
+  "precio_lista": 75,
+  "oferta": false,
+  "tags": [
+   "estilismo",
+   "hombre"
+  ],
+  "img": "assets/productos/dry-muk-crema-de-peinado.webp",
+  "desc": "Acabado ultramate. Fijación firme. Resistente a la humedad. No sedescascarilla. Soluble en agua. Fragancia de kiwi.",
+  "url": "https://www.mukhairperu.com/pe/product/dry-muk-crema-de-peinado/"
+ },
+ {
+  "id": "8879",
+  "slug": "rough-muk-crema-moldeadora",
+  "nombre": "Rough MUK Crema Moldeadora",
+  "linea": "Rough",
+  "precio": 75,
+  "precio_lista": 75,
+  "oferta": false,
+  "tags": [
+   "estilismo",
+   "hombre"
+  ],
+  "img": "assets/productos/rough-muk-crema-moldeadora.webp",
+  "desc": "Brillo y fijación naturales. Fijación flexible. Resistente a la humedad. No se descascarilla. Soluble en agua. Fragancia de melón.",
+  "url": "https://www.mukhairperu.com/pe/product/rough-muk-crema-moldeadora/"
+ },
+ {
+  "id": "8874",
+  "slug": "slick-muk-gomina",
+  "nombre": "Slick MUK Gomina",
+  "linea": "Slick",
+  "precio": 75,
+  "precio_lista": 75,
+  "oferta": false,
+  "tags": [
+   "estilismo",
+   "hombre"
+  ],
+  "img": "assets/productos/slick-muk-gomina.webp",
+  "desc": "Acabado muy brillante. Fijación fuerte. Resistente a la humedad. No se descascarilla. Soluble en agua. Fragancia de coco y vainilla.",
+  "url": "https://www.mukhairperu.com/pe/product/slick-muk-gomina/"
+ },
+ {
+  "id": "8869",
+  "slug": "raw-muk-barro-de-peinado",
+  "nombre": "Raw MUK Barro de Peinado",
+  "linea": "Raw",
+  "precio": 75,
+  "precio_lista": 75,
+  "oferta": false,
+  "tags": [
+   "estilismo",
+   "hombre"
+  ],
+  "img": "assets/productos/raw-muk-barro-de-peinado.webp",
+  "desc": "Acabado muy brillante. Fijación firme. Resistente a la humedad. No se descascarilla. Soluble en agua. Fragancia de mango.",
+  "url": "https://www.mukhairperu.com/pe/product/raw-muk-barro-de-peinado/"
+ },
+ {
+  "id": "8864",
+  "slug": "filthy-muk-crema-de-peinado",
+  "nombre": "Filthy MUK Crema de Peinado",
+  "linea": "Filthy",
+  "precio": 75,
+  "precio_lista": 75,
+  "oferta": false,
+  "tags": [
+   "estilismo",
+   "hombre"
+  ],
+  "img": "assets/productos/filthy-muk-crema-de-peinado.webp",
+  "desc": "• Fijación firme. • Acabado áspero. • Resistente a la humedad. • No se descascarilla. • Soluble en agua. • Fragancia de manzana verde.",
+  "url": "https://www.mukhairperu.com/pe/product/filthy-muk-crema-de-peinado/"
+ },
+ {
+  "id": "8859",
+  "slug": "hard-muk-barro-de-peinado",
+  "nombre": "Hard MUK Barro de Peinado",
+  "linea": "Hard",
+  "precio": 75,
+  "precio_lista": 75,
+  "oferta": false,
+  "tags": [
+   "estilismo",
+   "hombre"
+  ],
+  "img": "assets/productos/hard-muk-barro-de-peinado.webp",
+  "desc": "• Fijación brutal. • Acabado mate y con poco brillo. • Fijación flexible. • Resistente a la humedad. • No se descascarilla. • Soluble en agua. • Fragancia de naranja.",
+  "url": "https://www.mukhairperu.com/pe/product/hard-muk-barro-de-peinado/"
+ },
+ {
   "id": "11500",
   "slug": "travel-pack-trio-tratamiento-ultrasuave-deep-muk",
   "nombre": "Travel Pack Trio Tratamiento Ultrasuave Deep MUK",
@@ -577,22 +689,6 @@ var MUK_PRODUCTOS = [
   "url": "https://www.mukhairperu.com/pe/product/mr-muk-shampoo-de-cabello-barba-y-cuerpo/"
  },
  {
-  "id": "8952",
-  "slug": "savage-muk-barro-para-peinado",
-  "nombre": "Savage MUK Barro para Peinado",
-  "linea": "Savage",
-  "precio": 75,
-  "precio_lista": 75,
-  "oferta": false,
-  "tags": [
-   "estilismo",
-   "hombre"
-  ],
-  "img": "assets/productos/savage-muk-barro-para-peinado.webp",
-  "desc": "Fijación salvaje. Acabado semi mate con brillo. Fijación flexible. Resistente a la humedad. No se descascarilla. Soluble en agua. Fragancia de piel de mandarina.",
-  "url": "https://www.mukhairperu.com/pe/product/savage-muk-barro-para-peinado/"
- },
- {
   "id": "8949",
   "slug": "shampoo-para-cuero-cabelludo-grasoso",
   "nombre": "Head Shampoo para Cuero Cabelludo Grasoso",
@@ -1030,101 +1126,5 @@ var MUK_PRODUCTOS = [
   "img": "assets/productos/beach-muk-spray-de-sal-de-mar.webp",
   "desc": "Sexy cabello de playa en una botella. Textura ligera. Las sales naturales del mar le dan al cabello una apariencia alborotada y sensual con una textura increíble. Utilizar en cabello seco o húmedo. Ligero acabado mate. Fragancia de melón.",
   "url": "https://www.mukhairperu.com/pe/product/beach-muk-spray-de-sal-de-mar/"
- },
- {
-  "id": "8884",
-  "slug": "dry-muk-crema-de-peinado",
-  "nombre": "Dry MUK Crema de Peinado",
-  "linea": "Dry",
-  "precio": 75,
-  "precio_lista": 75,
-  "oferta": false,
-  "tags": [
-   "estilismo",
-   "hombre"
-  ],
-  "img": "assets/productos/dry-muk-crema-de-peinado.webp",
-  "desc": "Acabado ultramate. Fijación firme. Resistente a la humedad. No sedescascarilla. Soluble en agua. Fragancia de kiwi.",
-  "url": "https://www.mukhairperu.com/pe/product/dry-muk-crema-de-peinado/"
- },
- {
-  "id": "8879",
-  "slug": "rough-muk-crema-moldeadora",
-  "nombre": "Rough MUK Crema Moldeadora",
-  "linea": "Rough",
-  "precio": 75,
-  "precio_lista": 75,
-  "oferta": false,
-  "tags": [
-   "estilismo",
-   "hombre"
-  ],
-  "img": "assets/productos/rough-muk-crema-moldeadora.webp",
-  "desc": "Brillo y fijación naturales. Fijación flexible. Resistente a la humedad. No se descascarilla. Soluble en agua. Fragancia de melón.",
-  "url": "https://www.mukhairperu.com/pe/product/rough-muk-crema-moldeadora/"
- },
- {
-  "id": "8874",
-  "slug": "slick-muk-gomina",
-  "nombre": "Slick MUK Gomina",
-  "linea": "Slick",
-  "precio": 75,
-  "precio_lista": 75,
-  "oferta": false,
-  "tags": [
-   "estilismo",
-   "hombre"
-  ],
-  "img": "assets/productos/slick-muk-gomina.webp",
-  "desc": "Acabado muy brillante. Fijación fuerte. Resistente a la humedad. No se descascarilla. Soluble en agua. Fragancia de coco y vainilla.",
-  "url": "https://www.mukhairperu.com/pe/product/slick-muk-gomina/"
- },
- {
-  "id": "8869",
-  "slug": "raw-muk-barro-de-peinado",
-  "nombre": "Raw MUK Barro de Peinado",
-  "linea": "Raw",
-  "precio": 75,
-  "precio_lista": 75,
-  "oferta": false,
-  "tags": [
-   "estilismo",
-   "hombre"
-  ],
-  "img": "assets/productos/raw-muk-barro-de-peinado.webp",
-  "desc": "Acabado muy brillante. Fijación firme. Resistente a la humedad. No se descascarilla. Soluble en agua. Fragancia de mango.",
-  "url": "https://www.mukhairperu.com/pe/product/raw-muk-barro-de-peinado/"
- },
- {
-  "id": "8864",
-  "slug": "filthy-muk-crema-de-peinado",
-  "nombre": "Filthy MUK Crema de Peinado",
-  "linea": "Filthy",
-  "precio": 75,
-  "precio_lista": 75,
-  "oferta": false,
-  "tags": [
-   "estilismo",
-   "hombre"
-  ],
-  "img": "assets/productos/filthy-muk-crema-de-peinado.webp",
-  "desc": "• Fijación firme. • Acabado áspero. • Resistente a la humedad. • No se descascarilla. • Soluble en agua. • Fragancia de manzana verde.",
-  "url": "https://www.mukhairperu.com/pe/product/filthy-muk-crema-de-peinado/"
- },
- {
-  "id": "8859",
-  "slug": "hard-muk-barro-de-peinado",
-  "nombre": "Hard MUK Barro de Peinado",
-  "linea": "Hard",
-  "precio": 75,
-  "precio_lista": 75,
-  "oferta": false,
-  "tags": [
-   "estilismo",
-   "hombre"
-  ],
-  "img": "assets/productos/hard-muk-barro-de-peinado.webp",
-  "desc": "• Fijación brutal. • Acabado mate y con poco brillo. • Fijación flexible. • Resistente a la humedad. • No se descascarilla. • Soluble en agua. • Fragancia de naranja.",
-  "url": "https://www.mukhairperu.com/pe/product/hard-muk-barro-de-peinado/"
  }
 ];
