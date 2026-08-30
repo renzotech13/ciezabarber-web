@@ -18,8 +18,8 @@
   // depende del bot, que todavía no distingue citas por barbero) — el
   // selector de fecha simplemente deshabilita esos días de la semana.
   const BARBEROS = [
-    { id: "cieza", nombre: "Cieza", rol: "Fundador · Barbero", descanso: 3, foto: "assets/img/ciezabarber_3.jpg" },
-    { id: "nilton", nombre: "Nilton", rol: "Barbero profesional", descanso: 2, foto: "assets/img/ciezabarber_2.jpg" },
+    { id: "cieza", nombre: "Cieza", rol: "Fundador · Barbero", descanso: 3, foto: "assets/img/ciezabarber_2.jpg" },
+    { id: "nilton", nombre: "Nilton", rol: "Barbero profesional", descanso: 2, foto: "assets/img/ciezabarber-nilton.jpg" },
     { id: "bryan", nombre: "Bryan", rol: "Barbero profesional", descanso: 1, foto: "assets/img/bryan-barber.jpg" }
   ];
 
