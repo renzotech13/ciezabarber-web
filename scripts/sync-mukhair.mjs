@@ -99,6 +99,38 @@ for (const f of await readdir(join(RAIZ, "assets/productos"))) {
   if (!usados.has(f)) { await unlink(join(RAIZ, "assets/productos", f)); console.log(`  eliminada ${f}`); }
 }
 
+// Precio real de venta al público (pedido del negocio, agosto 2026): el
+// precio del proveedor no es lo que se cobra en tienda. Va por id de
+// WooCommerce (estable aunque cambie el precio o el nombre del lado del
+// proveedor), así una corrida futura del script no pisa esta corrección.
+const PRECIO_REAL = {
+  // Barros/cremas/gomina de peinado individuales: S/75 -> S/110
+  "8952": 110, "8884": 110, "8879": 110, "8874": 110, "8869": 110, "8864": 110, "8859": 110,
+  "8891": 110, // Fat MUK Voluminizador: S/100 -> S/110
+  "11221": 110, // mr. muk Shampoo de estilizado y textura
+  // Duo Gift Pack (línea individual en combo chico): S/148 -> S/180
+  "8992": 180, "8984": 180, "8982": 180, "8980": 180, "8976": 180, "8978": 180, "8974": 180, "8986": 180,
+  // Dúos en combo: S/176 -> S/220
+  "8960": 220, "9012": 220, "8958": 220, "8968": 220, "8962": 220, "8956": 220, "8970": 220, "9016": 220, "8994": 220,
+  "11500": 180, // Travel Pack Trio Tratamiento Ultrasuave Deep MUK
+  "8990": 230, // Dúo Shampoo y Tratamiento Milagroso 20 en 1 Head MUK
+  "8998": 282, // Dúo Reparador Aceite de Argan
+};
+
+for (const p of productos) {
+  if (PRECIO_REAL[p.id] != null) {
+    p.precio = PRECIO_REAL[p.id];
+    p.precio_lista = PRECIO_REAL[p.id];
+    p.oferta = false;
+  } else if (p.oferta) {
+    // El resto de descuentos del proveedor no se muestran: precio real
+    // (precio de lista) en vez del precio rebajado, salvo lo de arriba.
+    p.precio = p.precio_lista;
+    p.oferta = false;
+  }
+  p.tags = p.tags.filter((t) => t !== "ofertas");
+}
+
 // Las ceras/barros/gominas de peinado (potes individuales de "Cuidado del
 // hombre") son lo primero que la barbería quiere mostrar en la vitrina —
 // van antes que los dúos/tríos/ofertas en combo, que igual siguen listados.
@@ -114,8 +146,7 @@ var MUK_FILTROS = [
   { id: "tratamientos", label: "Tratamientos" },
   { id: "estilismo", label: "Estilismo" },
   { id: "hombre", label: "Cuidado del hombre" },
-  { id: "packs", label: "Dúos & tríos" },
-  { id: "ofertas", label: "Ofertas" }
+  { id: "packs", label: "Dúos & tríos" }
 ];
 
 var MUK_PRODUCTOS = `;

@@ -7,8 +7,7 @@ var MUK_FILTROS = [
   { id: "tratamientos", label: "Tratamientos" },
   { id: "estilismo", label: "Estilismo" },
   { id: "hombre", label: "Cuidado del hombre" },
-  { id: "packs", label: "Dúos & tríos" },
-  { id: "ofertas", label: "Ofertas" }
+  { id: "packs", label: "Dúos & tríos" }
 ];
 
 var MUK_PRODUCTOS = [
@@ -17,8 +16,8 @@ var MUK_PRODUCTOS = [
   "slug": "savage-muk-barro-para-peinado",
   "nombre": "Savage MUK Barro para Peinado",
   "linea": "Savage",
-  "precio": 75,
-  "precio_lista": 75,
+  "precio": 110,
+  "precio_lista": 110,
   "oferta": false,
   "tags": [
    "estilismo",
@@ -33,8 +32,8 @@ var MUK_PRODUCTOS = [
   "slug": "dry-muk-crema-de-peinado",
   "nombre": "Dry MUK Crema de Peinado",
   "linea": "Dry",
-  "precio": 75,
-  "precio_lista": 75,
+  "precio": 110,
+  "precio_lista": 110,
   "oferta": false,
   "tags": [
    "estilismo",
@@ -49,8 +48,8 @@ var MUK_PRODUCTOS = [
   "slug": "rough-muk-crema-moldeadora",
   "nombre": "Rough MUK Crema Moldeadora",
   "linea": "Rough",
-  "precio": 75,
-  "precio_lista": 75,
+  "precio": 110,
+  "precio_lista": 110,
   "oferta": false,
   "tags": [
    "estilismo",
@@ -65,8 +64,8 @@ var MUK_PRODUCTOS = [
   "slug": "slick-muk-gomina",
   "nombre": "Slick MUK Gomina",
   "linea": "Slick",
-  "precio": 75,
-  "precio_lista": 75,
+  "precio": 110,
+  "precio_lista": 110,
   "oferta": false,
   "tags": [
    "estilismo",
@@ -81,8 +80,8 @@ var MUK_PRODUCTOS = [
   "slug": "raw-muk-barro-de-peinado",
   "nombre": "Raw MUK Barro de Peinado",
   "linea": "Raw",
-  "precio": 75,
-  "precio_lista": 75,
+  "precio": 110,
+  "precio_lista": 110,
   "oferta": false,
   "tags": [
    "estilismo",
@@ -97,8 +96,8 @@ var MUK_PRODUCTOS = [
   "slug": "filthy-muk-crema-de-peinado",
   "nombre": "Filthy MUK Crema de Peinado",
   "linea": "Filthy",
-  "precio": 75,
-  "precio_lista": 75,
+  "precio": 110,
+  "precio_lista": 110,
   "oferta": false,
   "tags": [
    "estilismo",
@@ -113,8 +112,8 @@ var MUK_PRODUCTOS = [
   "slug": "hard-muk-barro-de-peinado",
   "nombre": "Hard MUK Barro de Peinado",
   "linea": "Hard",
-  "precio": 75,
-  "precio_lista": 75,
+  "precio": 110,
+  "precio_lista": 110,
   "oferta": false,
   "tags": [
    "estilismo",
@@ -129,11 +128,10 @@ var MUK_PRODUCTOS = [
   "slug": "travel-pack-trio-tratamiento-ultrasuave-deep-muk",
   "nombre": "Travel Pack Trio Tratamiento Ultrasuave Deep MUK",
   "linea": "Deep",
-  "precio": 115,
-  "precio_lista": 155,
-  "oferta": true,
+  "precio": 180,
+  "precio_lista": 180,
+  "oferta": false,
   "tags": [
-   "ofertas",
    "packs"
   ],
   "img": "assets/productos/travel-pack-trio-tratamiento-ultrasuave-deep-muk.webp",
@@ -145,11 +143,10 @@ var MUK_PRODUCTOS = [
   "slug": "duo-reparador-aceite-de-argan",
   "nombre": "Dúo Reparador Aceite de Argan",
   "linea": "MUK SPA",
-  "precio": 225,
+  "precio": 282,
   "precio_lista": 282,
-  "oferta": true,
+  "oferta": false,
   "tags": [
-   "ofertas",
    "packs"
   ],
   "img": "assets/productos/duo-reparador-aceite-de-argan.jpg",
@@ -161,11 +158,10 @@ var MUK_PRODUCTOS = [
   "slug": "duo-voluminizador-fat-muk",
   "nombre": "Dúo Voluminizador Fat MUK",
   "linea": "Fat",
-  "precio": 176,
+  "precio": 220,
   "precio_lista": 220,
-  "oferta": true,
+  "oferta": false,
   "tags": [
-   "ofertas",
    "packs",
    "shampoos"
   ],
@@ -178,11 +174,10 @@ var MUK_PRODUCTOS = [
   "slug": "duo-shampoo-y-tratamiento-milagroso-20-en-1-head-muk",
   "nombre": "Dúo Shampoo y Tratamiento Milagroso 20 en 1 Head MUK",
   "linea": "Head",
-  "precio": 181,
-  "precio_lista": 227,
-  "oferta": true,
+  "precio": 230,
+  "precio_lista": 230,
+  "oferta": false,
   "tags": [
-   "ofertas",
    "packs"
   ],
   "img": "assets/productos/duo-shampoo-y-tratamiento-milagroso-20-en-1-head-muk.jpg",
@@ -194,11 +189,10 @@ var MUK_PRODUCTOS = [
   "slug": "duo-realzador-de-rizos-con-fijacion-extra-kinky-muk",
   "nombre": "Dúo Realzador de Rizos con Fijación Extra Kinky MUK",
   "linea": "Kinky",
-  "precio": 176,
+  "precio": 220,
   "precio_lista": 220,
-  "oferta": true,
+  "oferta": false,
   "tags": [
-   "ofertas",
    "packs"
   ],
   "img": "assets/productos/duo-realzador-de-rizos-con-fijacion-extra-kinky-muk.jpg",
@@ -210,11 +204,10 @@ var MUK_PRODUCTOS = [
   "slug": "duo-deep-y-tratamiento-milagroso-20-en-1",
   "nombre": "Dúo Deep y Tratamiento Milagroso 20 en 1",
   "linea": "Deep",
-  "precio": 187,
+  "precio": 234,
   "precio_lista": 234,
-  "oferta": true,
+  "oferta": false,
   "tags": [
-   "ofertas",
    "packs"
   ],
   "img": "assets/productos/duo-deep-y-tratamiento-milagroso-20-en-1.jpg",
@@ -226,11 +219,10 @@ var MUK_PRODUCTOS = [
   "slug": "duo-reparador-intense-muk",
   "nombre": "Dúo Reparador Intense MUK",
   "linea": "Intense",
-  "precio": 176,
+  "precio": 220,
   "precio_lista": 220,
-  "oferta": true,
+  "oferta": false,
   "tags": [
-   "ofertas",
    "packs",
    "shampoos"
   ],
@@ -243,11 +235,10 @@ var MUK_PRODUCTOS = [
   "slug": "duo-para-conservar-el-color-vivid-muk",
   "nombre": "Dúo para Conservar el Color Vivid MUK",
   "linea": "Vivid",
-  "precio": 176,
+  "precio": 220,
   "precio_lista": 220,
-  "oferta": true,
+  "oferta": false,
   "tags": [
-   "ofertas",
    "packs"
   ],
   "img": "assets/productos/duo-para-conservar-el-color-vivid-muk.jpg",
@@ -259,11 +250,10 @@ var MUK_PRODUCTOS = [
   "slug": "duo-tonificador-blonde-muk",
   "nombre": "Dúo Tonificador Blonde MUK",
   "linea": "Blonde",
-  "precio": 181,
+  "precio": 227,
   "precio_lista": 227,
-  "oferta": true,
+  "oferta": false,
   "tags": [
-   "ofertas",
    "packs"
   ],
   "img": "assets/productos/duo-tonificador-blonde-muk.jpg",
@@ -275,11 +265,10 @@ var MUK_PRODUCTOS = [
   "slug": "duo-shampoo-y-mascarilla-aceite-de-argan",
   "nombre": "Dúo Shampoo y Mascarilla Aceite de Argan",
   "linea": "MUK SPA",
-  "precio": 237,
+  "precio": 297,
   "precio_lista": 297,
-  "oferta": true,
+  "oferta": false,
   "tags": [
-   "ofertas",
    "packs"
   ],
   "img": "assets/productos/duo-shampoo-y-mascarilla-aceite-de-argan.webp",
@@ -291,12 +280,11 @@ var MUK_PRODUCTOS = [
   "slug": "duo-protector-termico-y-serum-suavizante-hot-muk",
   "nombre": "Dúo Protector Térmico y Serum Suavizante Hot MUK",
   "linea": "Hot",
-  "precio": 176,
+  "precio": 220,
   "precio_lista": 220,
-  "oferta": true,
+  "oferta": false,
   "tags": [
    "estilismo",
-   "ofertas",
    "packs"
   ],
   "img": "assets/productos/duo-protector-termico-y-serum-suavizante-hot-muk.jpg",
@@ -308,11 +296,10 @@ var MUK_PRODUCTOS = [
   "slug": "duo-ultrasuave-deep-muk",
   "nombre": "Dúo Ultrasuave Deep MUK",
   "linea": "Deep",
-  "precio": 176,
+  "precio": 220,
   "precio_lista": 220,
-  "oferta": true,
+  "oferta": false,
   "tags": [
-   "ofertas",
    "packs",
    "shampoos"
   ],
@@ -325,12 +312,11 @@ var MUK_PRODUCTOS = [
   "slug": "duo-realzador-de-rizos-kinky-muk",
   "nombre": "Dúo Realzador de Rizos Kinky MUK",
   "linea": "Kinky",
-  "precio": 176,
+  "precio": 220,
   "precio_lista": 220,
-  "oferta": true,
+  "oferta": false,
   "tags": [
    "estilismo",
-   "ofertas",
    "packs"
   ],
   "img": "assets/productos/duo-realzador-de-rizos-kinky-muk.jpg",
@@ -342,13 +328,12 @@ var MUK_PRODUCTOS = [
   "slug": "escoge-tu-linea",
   "nombre": "Escoge Tu Linea",
   "linea": "muk",
-  "precio": 148,
-  "precio_lista": 185,
-  "oferta": true,
+  "precio": 180,
+  "precio_lista": 180,
+  "oferta": false,
   "tags": [
    "estilismo",
    "hombre",
-   "ofertas",
    "packs"
   ],
   "img": "assets/productos/escoge-tu-linea.webp",
@@ -360,13 +345,12 @@ var MUK_PRODUCTOS = [
   "slug": "savage-muk-duo-gift-pack",
   "nombre": "Savage MUK Duo Gift Pack",
   "linea": "Savage",
-  "precio": 148,
-  "precio_lista": 185,
-  "oferta": true,
+  "precio": 180,
+  "precio_lista": 180,
+  "oferta": false,
   "tags": [
    "estilismo",
    "hombre",
-   "ofertas",
    "packs"
   ],
   "img": "assets/productos/savage-muk-duo-gift-pack.webp",
@@ -378,13 +362,12 @@ var MUK_PRODUCTOS = [
   "slug": "rough-muk-duo-gift-pack",
   "nombre": "Rough MUK Duo Gift Pack",
   "linea": "Rough",
-  "precio": 148,
-  "precio_lista": 185,
-  "oferta": true,
+  "precio": 180,
+  "precio_lista": 180,
+  "oferta": false,
   "tags": [
    "estilismo",
    "hombre",
-   "ofertas",
    "packs"
   ],
   "img": "assets/productos/rough-muk-duo-gift-pack.webp",
@@ -396,13 +379,12 @@ var MUK_PRODUCTOS = [
   "slug": "barros-de-95-95-gramos",
   "nombre": "Barros de 95 + 95 Gramos",
   "linea": "muk",
-  "precio": 176,
+  "precio": 220,
   "precio_lista": 220,
-  "oferta": true,
+  "oferta": false,
   "tags": [
    "estilismo",
    "hombre",
-   "ofertas",
    "packs"
   ],
   "img": "assets/productos/barros-de-95-95-gramos.webp",
@@ -414,13 +396,12 @@ var MUK_PRODUCTOS = [
   "slug": "raw-muk-duo-gift-pack",
   "nombre": "Raw MUK Duo Gift Pack",
   "linea": "Raw",
-  "precio": 148,
-  "precio_lista": 185,
-  "oferta": true,
+  "precio": 180,
+  "precio_lista": 180,
+  "oferta": false,
   "tags": [
    "estilismo",
    "hombre",
-   "ofertas",
    "packs"
   ],
   "img": "assets/productos/raw-muk-duo-gift-pack.webp",
@@ -432,13 +413,12 @@ var MUK_PRODUCTOS = [
   "slug": "filthy-muk-duo-gift-pack",
   "nombre": "Filthy MUK Duo Gift Pack",
   "linea": "Filthy",
-  "precio": 148,
-  "precio_lista": 185,
-  "oferta": true,
+  "precio": 180,
+  "precio_lista": 180,
+  "oferta": false,
   "tags": [
    "estilismo",
    "hombre",
-   "ofertas",
    "packs"
   ],
   "img": "assets/productos/filthy-muk-duo-gift-pack.webp",
@@ -450,13 +430,12 @@ var MUK_PRODUCTOS = [
   "slug": "hard-muk-duo-gift-pack",
   "nombre": "Hard MUK Duo Gift Pack",
   "linea": "Hard",
-  "precio": 148,
-  "precio_lista": 185,
-  "oferta": true,
+  "precio": 180,
+  "precio_lista": 180,
+  "oferta": false,
   "tags": [
    "estilismo",
    "hombre",
-   "ofertas",
    "packs"
   ],
   "img": "assets/productos/hard-muk-duo-gift-pack.webp",
@@ -468,13 +447,12 @@ var MUK_PRODUCTOS = [
   "slug": "dry-muk-duo-gift-pack",
   "nombre": "Dry MUK Duo Gift Pack",
   "linea": "Dry",
-  "precio": 148,
-  "precio_lista": 185,
-  "oferta": true,
+  "precio": 180,
+  "precio_lista": 180,
+  "oferta": false,
   "tags": [
    "estilismo",
    "hombre",
-   "ofertas",
    "packs"
   ],
   "img": "assets/productos/dry-muk-duo-gift-pack.webp",
@@ -486,12 +464,10 @@ var MUK_PRODUCTOS = [
   "slug": "duo-intense-muk-500ml",
   "nombre": "Duo Intense MUK 500ml",
   "linea": "Intense",
-  "precio": 225,
+  "precio": 352,
   "precio_lista": 352,
-  "oferta": true,
-  "tags": [
-   "ofertas"
-  ],
+  "oferta": false,
+  "tags": [],
   "img": "assets/productos/duo-intense-muk-500ml.png",
   "desc": "",
   "url": "https://www.mukhairperu.com/pe/product/duo-intense-muk-500ml/"
@@ -501,11 +477,10 @@ var MUK_PRODUCTOS = [
   "slug": "duo-tratamiento-ultrasuave-deep-muk",
   "nombre": "Dúo Tratamiento Ultrasuave Deep MUK",
   "linea": "Deep",
-  "precio": 181,
+  "precio": 227,
   "precio_lista": 227,
-  "oferta": true,
+  "oferta": false,
   "tags": [
-   "ofertas",
    "packs"
   ],
   "img": "assets/productos/duo-tratamiento-ultrasuave-deep-muk.jpg",
@@ -517,11 +492,10 @@ var MUK_PRODUCTOS = [
   "slug": "duo-shampoo-y-tratamiento-aceite-de-argan",
   "nombre": "Dúo Shampoo y Tratamiento Aceite de Argan",
   "linea": "MUK SPA",
-  "precio": 249,
+  "precio": 312,
   "precio_lista": 312,
-  "oferta": true,
+  "oferta": false,
   "tags": [
-   "ofertas",
    "packs"
   ],
   "img": "assets/productos/duo-shampoo-y-tratamiento-aceite-de-argan.jpg",
@@ -533,11 +507,10 @@ var MUK_PRODUCTOS = [
   "slug": "trio-tratamiento-aceite-de-argan",
   "nombre": "Trío Tratamiento Aceite de Argan",
   "linea": "MUK SPA",
-  "precio": 339,
+  "precio": 453,
   "precio_lista": 453,
-  "oferta": true,
+  "oferta": false,
   "tags": [
-   "ofertas",
    "packs"
   ],
   "img": "assets/productos/trio-tratamiento-aceite-de-argan.webp",
@@ -549,11 +522,10 @@ var MUK_PRODUCTOS = [
   "slug": "duo-tratamiento-reparador-intense-muk",
   "nombre": "Dúo Tratamiento Reparador Intense MUK",
   "linea": "Intense",
-  "precio": 181,
+  "precio": 227,
   "precio_lista": 227,
-  "oferta": true,
+  "oferta": false,
   "tags": [
-   "ofertas",
    "packs"
   ],
   "img": "assets/productos/duo-tratamiento-reparador-intense-muk.jpg",
@@ -565,11 +537,10 @@ var MUK_PRODUCTOS = [
   "slug": "trio-tratamiento-ultrasuave-deep-muk",
   "nombre": "Trío Tratamiento Ultrasuave Deep MUK",
   "linea": "Deep",
-  "precio": 252,
+  "precio": 337,
   "precio_lista": 337,
-  "oferta": true,
+  "oferta": false,
   "tags": [
-   "ofertas",
    "packs"
   ],
   "img": "assets/productos/trio-tratamiento-ultrasuave-deep-muk.webp",
@@ -581,12 +552,11 @@ var MUK_PRODUCTOS = [
   "slug": "mr-muk-shampoo-de-estilizado-y-textura-barro-de-95-gr",
   "nombre": "mr. muk shampoo de estilizado y textura + Barro de 95 gr.",
   "linea": "mr. muk",
-  "precio": 154,
+  "precio": 220,
   "precio_lista": 220,
-  "oferta": true,
+  "oferta": false,
   "tags": [
    "hombre",
-   "ofertas",
    "packs"
   ],
   "img": "assets/productos/mr-muk-shampoo-de-estilizado-y-textura-barro-de-95-gr.webp",
@@ -598,11 +568,10 @@ var MUK_PRODUCTOS = [
   "slug": "duo-barro-95g-y-hard-shampoo",
   "nombre": "Dúo Barro 95g y Hard Shampoo",
   "linea": "Hard",
-  "precio": 176,
+  "precio": 220,
   "precio_lista": 220,
-  "oferta": true,
+  "oferta": false,
   "tags": [
-   "ofertas",
    "packs"
   ],
   "img": "assets/productos/duo-barro-95g-y-hard-shampoo.webp",
@@ -614,11 +583,10 @@ var MUK_PRODUCTOS = [
   "slug": "trio-tratamiento-reparador-intense-muk",
   "nombre": "Trío Tratamiento Reparador Intense MUK",
   "linea": "Intense",
-  "precio": 252,
+  "precio": 337,
   "precio_lista": 337,
-  "oferta": true,
+  "oferta": false,
   "tags": [
-   "ofertas",
    "packs"
   ],
   "img": "assets/productos/trio-tratamiento-reparador-intense-muk.webp",
@@ -630,12 +598,11 @@ var MUK_PRODUCTOS = [
   "slug": "slick-muk-duo-gift-pack",
   "nombre": "Slick MUK Duo Gift Pack",
   "linea": "Slick",
-  "precio": 148,
-  "precio_lista": 185,
-  "oferta": true,
+  "precio": 180,
+  "precio_lista": 180,
+  "oferta": false,
   "tags": [
    "estilismo",
-   "ofertas",
    "packs"
   ],
   "img": "assets/productos/slick-muk-duo-gift-pack.webp",
@@ -662,12 +629,11 @@ var MUK_PRODUCTOS = [
   "slug": "mr-muk-shampoo-de-estilizado-y-textura",
   "nombre": "mr. muk Shampoo de estilizado y textura",
   "linea": "mr. muk",
-  "precio": 66,
+  "precio": 110,
   "precio_lista": 110,
-  "oferta": true,
+  "oferta": false,
   "tags": [
-   "hombre",
-   "ofertas"
+   "hombre"
   ],
   "img": "assets/productos/mr-muk-shampoo-de-estilizado-y-textura.webp",
   "desc": "Un shampoo de estilizado y peinado que crea volúmen en la ducha, dejando tu cabello fuerte y lujosamente texturizado. Para mas cuerpo no apliques acondicionador.",
@@ -1102,8 +1068,8 @@ var MUK_PRODUCTOS = [
   "slug": "fat-muk-voluminizador",
   "nombre": "Fat MUK Voluminizador",
   "linea": "Fat",
-  "precio": 100,
-  "precio_lista": 100,
+  "precio": 110,
+  "precio_lista": 110,
   "oferta": false,
   "tags": [
    "estilismo"
