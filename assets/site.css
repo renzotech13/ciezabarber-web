@@ -278,11 +278,12 @@ h3.display{font-size:clamp(22px,2.4vw,32px);line-height:1}
 
 /* ---------- sección a pantalla completa ---------- */
 .fullshot{
-  position:relative;min-height:88svh;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;gap:16px;text-align:center;color:#fff;padding:0 var(--pad);overflow:hidden;
+  position:relative;min-height:100svh;display:flex;flex-direction:column;
+  align-items:center;justify-content:flex-end;gap:16px;text-align:center;color:#fff;overflow:hidden;
+  padding:0 var(--pad) clamp(56px,10vh,110px);
 }
 .fullshot .bg{position:absolute;inset:0}
-.fullshot .bg img{width:100%;height:100%;object-fit:cover}
+.fullshot .bg img{width:100%;height:100%;object-fit:cover;object-position:center 18%}
 .fullshot .bg:after{content:"";position:absolute;inset:0;background:rgba(0,0,0,.55)}
 .fullshot>*{position:relative;z-index:2}
 .fullshot h2{color:#fff}
