@@ -128,34 +128,6 @@
     }
   });
 
-  /* ---------------- galería: tres columnas que rotan ---------------- */
-  const GALERIA = [
-    "assets/img/ciezabarber_1.jpg",
-    "assets/img/ciezabarber_2.jpg",
-    "assets/img/ciezabarber_3.jpg",
-    "assets/img/ciezabarber_4.jpg",
-    "assets/img/CiezaBarber_local_4.jpg"
-  ];
-  const cols = $$("#gallery .col");
-  cols.forEach((col, ci) => {
-    const orden = GALERIA.slice(ci).concat(GALERIA.slice(0, ci));
-    orden.forEach((src, i) => {
-      const img = new Image();
-      img.src = src;
-      img.alt = "Trabajo de Cieza Barber Studio";
-      img.loading = "lazy";
-      if (i === 0) img.className = "on";
-      col.appendChild(img);
-    });
-    let idx = 0;
-    setInterval(() => {
-      const imgs = $$("img", col);
-      imgs[idx].classList.remove("on");
-      idx = (idx + 1) % imgs.length;
-      imgs[idx].classList.add("on");
-    }, 3600 + ci * 700);
-  });
-
   /* ---------------- marquesina ---------------- */
   const PALABRAS = ["Corte", "Ritual de barba", "Color", "Facial", "Platinado", "Mechas", "MUK", "Los Olivos"];
   ["#mq1", "#mq2"].forEach((sel) => {

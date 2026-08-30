@@ -9,8 +9,19 @@
 
   const BOT_API_URL = "https://bot.ciezabarber.com";
   const WEEKDAYS = ["dom", "lun", "mar", "mié", "jue", "vie", "sáb"];
+  const DIAS_PLURAL = ["domingos", "lunes", "martes", "miércoles", "jueves", "viernes", "sábados"];
   const MONTHS = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"];
   const GRUPOS = ["Principales", "Complementarios", "Opcionales"];
+
+  // `descanso` es el índice de Date.getDay() (0=domingo … 6=sábado) del día
+  // que ese barbero no atiende. Es un bloqueo puramente de calendario (no
+  // depende del bot, que todavía no distingue citas por barbero) — el
+  // selector de fecha simplemente deshabilita esos días de la semana.
+  const BARBEROS = [
+    { id: "cieza", nombre: "Cieza", rol: "Fundador · Barbero", descanso: 3, foto: "assets/img/ciezabarber_3.jpg" },
+    { id: "nilton", nombre: "Nilton", rol: "Barbero profesional", descanso: 2, foto: "assets/img/ciezabarber_2.jpg" },
+    { id: "bryan", nombre: "Bryan", rol: "Barbero profesional", descanso: 1, foto: "assets/img/bryan-barber.jpg" }
+  ];
 
   const $ = (s, c) => (c || document).querySelector(s);
   const body = $("#bkBody");
@@ -34,6 +45,7 @@
   const state = {
     step: 1, grupos: [], cargandoCatalogo: true, catalogoError: false,
     filtro: "Todos", serviceIds: [],
+    barbero: null,
     dayOffset: 0, dateIdx: null, time: null, firstVisit: null,
     nombre: "", telefono: "", comentario: "",
     disponibilidad: {}, dispLoading: false, dispError: false,
@@ -81,6 +93,7 @@
     state.error = null;
     render();
     const days = getDays();
+    const barbero = BARBEROS.find((b) => b.id === state.barbero);
     try {
       const res = await fetch(`${BOT_API_URL}/public/reservas`, {
         method: "POST",
@@ -92,14 +105,18 @@
           nombre: state.nombre.trim(),
           telefono: normalizarTelefono(state.telefono.trim()),
           primera_visita: state.firstVisit === "si" ? true : state.firstVisit === "no" ? false : null,
-          comentario: state.comentario || undefined
+          // El bot todavía no tiene una columna propia para el barbero
+          // elegido — se antepone al comentario para que quede visible en
+          // el panel de citas sin perder la preferencia del cliente.
+          comentario: [barbero ? `Barbero preferido: ${barbero.nombre}.` : null, state.comentario || null]
+            .filter(Boolean).join(" ") || undefined
         })
       });
       if (res.status === 409) {
         // Alguien tomó ese horario mientras el cliente llenaba el formulario.
         state.enviando = false;
         state.error = "Ese horario se acaba de ocupar. Elige otro, por favor.";
-        state.step = 2;
+        state.step = 3;
         state.time = null;
         await cargarDisponibilidad();
         return;
@@ -149,9 +166,9 @@
    *  puede reservar por WhatsApp con su selección ya escrita. */
   function waLink() {
     const nombres = serviciosElegidos().map((s) => s.name).join(", ");
-    const texto = nombres
-      ? `Hola, quisiera agendar una cita para: ${nombres}`
-      : "Hola, quisiera agendar una cita";
+    const barbero = BARBEROS.find((b) => b.id === state.barbero);
+    let texto = nombres ? `Hola, quisiera agendar una cita para: ${nombres}` : "Hola, quisiera agendar una cita";
+    if (barbero) texto += ` con ${barbero.nombre}`;
     return `https://wa.me/51914851374?text=${encodeURIComponent(texto)}`;
   }
 
@@ -187,16 +204,31 @@
   }
 
   function paso2() {
+    const tarjetas = BARBEROS.map((b) => `
+      <button class="barbero-card${state.barbero === b.id ? " on" : ""}" data-barbero="${b.id}">
+        <span class="barbero-photo"><img src="${b.foto}" alt="${esc(b.nombre)}"></span>
+        <span class="barbero-nombre">${esc(b.nombre)}</span>
+        <span class="barbero-rol">${esc(b.rol)}</span>
+      </button>`).join("");
+    return `
+      <h2 class="display" style="font-size:clamp(26px,4vw,42px);margin-bottom:6px">Elige a tu barbero</h2>
+      <p class="text muted">Cada barbero tiene su día de descanso — en el siguiente paso, ese día no aparece disponible.</p>
+      <div class="barbero-grid">${tarjetas}</div>`;
+  }
+
+  function paso3() {
     const days = getDays();
+    const barbero = BARBEROS.find((b) => b.id === state.barbero);
     const tarjetas = days.map((d, i) => {
       const iso = toISO(d);
       const horas = state.disponibilidad[iso];
-      const sinCupo = !state.dispLoading && Array.isArray(horas) && horas.length === 0;
+      const descansa = !!barbero && d.getDay() === barbero.descanso;
+      const sinCupo = !descansa && !state.dispLoading && Array.isArray(horas) && horas.length === 0;
       return `
-        <button class="day${state.dateIdx === i ? " on" : ""}${sinCupo ? " off" : ""}" data-dia="${i}">
+        <button class="day${state.dateIdx === i ? " on" : ""}${(sinCupo || descansa) ? " off" : ""}" data-dia="${i}"${descansa ? ` title="${esc(barbero.nombre)} descansa este día"` : ""}>
           <span class="dw">${WEEKDAYS[d.getDay()]}</span>
           <span class="dd">${d.getDate()}</span>
-          <span class="dm">${MONTHS[d.getMonth()]}</span>
+          <span class="dm">${descansa ? "Descansa" : MONTHS[d.getMonth()]}</span>
         </button>`;
     }).join("");
 
@@ -209,15 +241,19 @@
         <a class="btn23" href="${waLink()}" target="_blank" rel="noopener"><span>Reservar por WhatsApp</span><i class="f1"></i><i class="f2"></i></a>
       </div>`;
     else if (state.dateIdx != null) {
-      const horas = state.disponibilidad[toISO(days[state.dateIdx])] || [];
-      horasHtml = horas.length
-        ? `<div class="times">${horas.map((h) => `<button class="time${state.time === h ? " on" : ""}" data-hora="${esc(h)}">${esc(h)}</button>`).join("")}</div>`
-        : '<p class="loading">Ese día ya no tiene cupos. Prueba con otro.</p>';
+      const diaElegido = days[state.dateIdx];
+      const descansaHoy = !!barbero && diaElegido.getDay() === barbero.descanso;
+      const horas = state.disponibilidad[toISO(diaElegido)] || [];
+      horasHtml = descansaHoy
+        ? `<p class="loading">${esc(barbero.nombre)} no atiende ese día. Elige otra fecha.</p>`
+        : horas.length
+          ? `<div class="times">${horas.map((h) => `<button class="time${state.time === h ? " on" : ""}" data-hora="${esc(h)}">${esc(h)}</button>`).join("")}</div>`
+          : '<p class="loading">Ese día ya no tiene cupos. Prueba con otro.</p>';
     }
 
     return `
       <h2 class="display" style="font-size:clamp(26px,4vw,42px);margin-bottom:6px">Fecha y hora</h2>
-      <p class="text muted">Horarios reales: lo que ves libre es lo que hay.</p>
+      <p class="text muted">Horarios reales: lo que ves libre es lo que hay.${barbero ? ` ${esc(barbero.nombre)} descansa los ${DIAS_PLURAL[barbero.descanso]}.` : ""}</p>
       ${state.error ? `<div class="alert" style="margin-top:16px">${esc(state.error)}</div>` : ""}
       <div style="display:flex;align-items:center;gap:10px;margin:22px 0 4px">
         <button class="chip" data-nav="-1"${state.dayOffset === 0 ? " disabled style=opacity:.35" : ""}>←</button>
@@ -227,7 +263,7 @@
       ${horasHtml}`;
   }
 
-  function paso3() {
+  function paso4() {
     return `
       <h2 class="display" style="font-size:clamp(26px,4vw,42px);margin-bottom:6px">Cuéntanos</h2>
       <p class="text muted">¿Es tu primera vez en Cieza Barber?</p>
@@ -241,10 +277,11 @@
       </div>`;
   }
 
-  function paso4() {
+  function paso5() {
     const days = getDays();
     const fecha = state.dateIdx != null ? days[state.dateIdx] : null;
     const servicios = serviciosElegidos();
+    const barbero = BARBEROS.find((b) => b.id === state.barbero);
     return `
       <h2 class="display" style="font-size:clamp(26px,4vw,42px);margin-bottom:6px">Tus datos</h2>
       <p class="text muted">Te confirmamos la cita por WhatsApp.</p>
@@ -263,6 +300,7 @@
         <div style="flex:1;min-width:260px">
           <div class="resume">
             ${servicios.map((s) => `<div class="r"><span>${esc(s.name)}</span><span>${precio(s.price)}</span></div>`).join("")}
+            <div class="r"><span>Barbero</span><span>${barbero ? esc(barbero.nombre) : "—"}</span></div>
             <div class="r"><span>Fecha</span><span>${fecha ? `${WEEKDAYS[fecha.getDay()]} ${fecha.getDate()} ${MONTHS[fecha.getMonth()]}` : "—"}</span></div>
             <div class="r"><span>Hora</span><span>${esc(state.time || "—")}</span></div>
             <div class="r" style="border-top:1px solid var(--line);padding-top:10px;font-weight:700"><span>Total</span><span>S/ ${total()}</span></div>
@@ -275,12 +313,13 @@
   function confirmacion() {
     const days = getDays();
     const fecha = days[state.dateIdx];
+    const barbero = BARBEROS.find((b) => b.id === state.barbero);
     return `
       <div class="ok-box">
         <div class="tick">✓</div>
         <h2 class="display" style="font-size:clamp(26px,4vw,42px)">Cita solicitada</h2>
         <p class="text muted" style="max-width:44ch">
-          Te escribiremos al <strong>${esc(state.telefono)}</strong> para confirmar tu cita del
+          Te escribiremos al <strong>${esc(state.telefono)}</strong> para confirmar tu cita${barbero ? ` con ${esc(barbero.nombre)}` : ""} del
           ${fecha ? `${WEEKDAYS[fecha.getDay()]} ${fecha.getDate()} de ${MONTHS[fecha.getMonth()]}` : ""} a las ${esc(state.time || "")}.
         </p>
         <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:8px">
@@ -293,9 +332,10 @@
   /* ------------------------------ render ------------------------------ */
   function puedeAvanzar() {
     if (state.step === 1) return state.serviceIds.length > 0;
-    if (state.step === 2) return state.dateIdx != null && !!state.time;
-    if (state.step === 3) return !!state.firstVisit;
-    if (state.step === 4) return state.nombre.trim().length > 1 && state.telefono.replace(/\D/g, "").length >= 6 && !state.enviando;
+    if (state.step === 2) return !!state.barbero;
+    if (state.step === 3) return state.dateIdx != null && !!state.time;
+    if (state.step === 4) return !!state.firstVisit;
+    if (state.step === 5) return state.nombre.trim().length > 1 && state.telefono.replace(/\D/g, "").length >= 6 && !state.enviando;
     return false;
   }
 
@@ -307,14 +347,14 @@
       return;
     }
     foot.style.display = "";
-    stepsEl.innerHTML = [1, 2, 3, 4].map((n) => `<i class="${n <= state.step ? "on" : ""}"></i>`).join("");
-    body.innerHTML = [paso1, paso2, paso3, paso4][state.step - 1]();
+    stepsEl.innerHTML = [1, 2, 3, 4, 5].map((n) => `<i class="${n <= state.step ? "on" : ""}"></i>`).join("");
+    body.innerHTML = [paso1, paso2, paso3, paso4, paso5][state.step - 1]();
     body.scrollTop = 0;
 
     backBtn.style.visibility = state.step === 1 ? "hidden" : "visible";
     const listo = puedeAvanzar();
     nextBtn.disabled = !listo;
-    $("span", nextBtn).textContent = state.enviando ? "Enviando…" : state.step === 4 ? "Confirmar cita" : "Continuar";
+    $("span", nextBtn).textContent = state.enviando ? "Enviando…" : state.step === 5 ? "Confirmar cita" : "Continuar";
 
     const servicios = serviciosElegidos();
     summaryEl.textContent = servicios.length
@@ -336,6 +376,9 @@
       render();
       return;
     }
+
+    const barb = e.target.closest("[data-barbero]");
+    if (barb) { state.barbero = barb.dataset.barbero; render(); return; }
 
     const nav = e.target.closest("[data-nav]");
     if (nav) {
@@ -375,8 +418,11 @@
 
   nextBtn.addEventListener("click", () => {
     if (!puedeAvanzar()) return;
-    if (state.step === 1) { state.step = 2; render(); cargarDisponibilidad(); return; }
-    if (state.step === 4) { enviarReserva(); return; }
+    // Recién al elegir barbero se sabe qué día de descanso descartar, así
+    // que la disponibilidad real se pide al entrar al paso de fecha/hora,
+    // no antes.
+    if (state.step === 2) { state.step = 3; render(); cargarDisponibilidad(); return; }
+    if (state.step === 5) { enviarReserva(); return; }
     state.step += 1;
     render();
   });
@@ -386,7 +432,7 @@
     if (state.confirmada) {
       // nueva reserva desde cero después de confirmar una
       state.confirmada = false;
-      state.step = 1; state.serviceIds = []; state.dateIdx = null; state.time = null;
+      state.step = 1; state.serviceIds = []; state.barbero = null; state.dateIdx = null; state.time = null;
       state.firstVisit = null; state.comentario = ""; state.error = null;
     }
     // Solo se preselecciona lo que existe en el catálogo real: el bot valida
