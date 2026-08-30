@@ -6,7 +6,7 @@
 (function () {
   "use strict";
 
-  const WA = "51914851374";
+  const WA = "51973298407";
   const PASO = 12;
   const $ = (s, c) => (c || document).querySelector(s);
 

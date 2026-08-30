@@ -169,7 +169,7 @@
     const barbero = BARBEROS.find((b) => b.id === state.barbero);
     let texto = nombres ? `Hola, quisiera agendar una cita para: ${nombres}` : "Hola, quisiera agendar una cita";
     if (barbero) texto += ` con ${barbero.nombre}`;
-    return `https://wa.me/51914851374?text=${encodeURIComponent(texto)}`;
+    return `https://wa.me/51973298407?text=${encodeURIComponent(texto)}`;
   }
 
   function precio(p) {
@@ -323,7 +323,7 @@
           ${fecha ? `${WEEKDAYS[fecha.getDay()]} ${fecha.getDate()} de ${MONTHS[fecha.getMonth()]}` : ""} a las ${esc(state.time || "")}.
         </p>
         <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:8px">
-          <a class="btn23" href="https://wa.me/51914851374?text=${encodeURIComponent("Hola, acabo de reservar una cita en la web a nombre de " + state.nombre)}" target="_blank" rel="noopener"><span>Escribir por WhatsApp</span><i class="f1"></i><i class="f2"></i></a>
+          <a class="btn23" href="https://wa.me/51973298407?text=${encodeURIComponent("Hola, acabo de reservar una cita en la web a nombre de " + state.nombre)}" target="_blank" rel="noopener"><span>Escribir por WhatsApp</span><i class="f1"></i><i class="f2"></i></a>
           <button class="btn23 outline" data-close-modal><span>Listo</span><i class="f1"></i><i class="f2"></i></button>
         </div>
       </div>`;
