@@ -304,7 +304,8 @@
           </div>
           <p class="mini muted" style="margin-top:12px">Si necesitas cancelar, avísanos con anticipación por WhatsApp.</p>
         </div>
-      </div>`;
+      </div>
+      <div class="policy"><strong>Política de reserva:</strong> se confirma con el 50% de adelanto. Si llegas con más de 5 minutos de retraso, el 50% abonado no se reembolsa.</div>`;
   }
 
   function confirmacion() {
