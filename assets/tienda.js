@@ -1,7 +1,13 @@
 /* =========================================================================
-   Tienda MUK — catálogo del proveedor (assets/mukhair.js) con filtros,
-   ficha de producto y bolsa. El pedido se cierra por WhatsApp, igual que
-   las citas: no hay pasarela de pago en el sitio.
+   Tienda MUK — catálogo con filtros, ficha de producto y bolsa. El pedido
+   se cierra por WhatsApp, igual que las citas: no hay pasarela de pago en
+   el sitio.
+
+   El catálogo se lee de Supabase (tabla `products`, editable desde el
+   admin — precio, línea, categorías, activo/inactivo). Si Supabase no
+   responde, cae al catálogo estático de assets/mukhair.js (el mismo que
+   genera scripts/sync-mukhair.mjs), para que la tienda nunca se quede
+   vacía por un problema de red.
    ========================================================================= */
 (function () {
   "use strict";
@@ -13,10 +19,37 @@
   const grid = $("#shopGrid");
   const filtrosEl = $("#shopFilters");
   const moreBtn = $("#shopMore");
-  if (!grid || !window.MUK_PRODUCTOS) return;
+  if (!grid) return;
 
   const state = { filtro: "todos", visibles: PASO };
   let carrito = cargarCarrito();
+  let PRODUCTOS = [];
+
+  /** Fila de la tabla `products` -> la forma que ya espera el resto de este
+   *  archivo (heredada del catálogo estático MUK_PRODUCTOS). */
+  function desdeSupabase(row) {
+    return {
+      id: row.id,
+      nombre: row.name,
+      precio: Number(row.price),
+      precio_lista: Number(row.price),
+      oferta: false,
+      tags: row.tags && row.tags.length ? row.tags : ["estilismo"],
+      img: row.image_url || "",
+      desc: row.description || "",
+      linea: row.linea || "muk",
+    };
+  }
+
+  async function cargarProductos() {
+    try {
+      const rows = await fetchProducts();
+      if (!rows.length) throw new Error("catálogo vacío");
+      PRODUCTOS = rows.map(desdeSupabase);
+    } catch (e) {
+      PRODUCTOS = window.MUK_PRODUCTOS || [];
+    }
+  }
 
   /* ------------------------------ bolsa ------------------------------ */
   function cargarCarrito() {
@@ -41,7 +74,7 @@
   }
   function totalCarrito() {
     return carrito.reduce((t, l) => {
-      const p = MUK_PRODUCTOS.find((x) => String(x.id) === String(l.id));
+      const p = PRODUCTOS.find((x) => String(x.id) === String(l.id));
       return t + (p ? p.precio * l.cant : 0);
     }, 0);
   }
@@ -54,8 +87,8 @@
 
   function filtrados() {
     return state.filtro === "todos"
-      ? MUK_PRODUCTOS
-      : MUK_PRODUCTOS.filter((p) => p.tags.includes(state.filtro));
+      ? PRODUCTOS
+      : PRODUCTOS.filter((p) => p.tags.includes(state.filtro));
   }
 
   /* ------------------------------ vitrina ------------------------------ */
@@ -91,7 +124,7 @@
 
   /* ------------------------------ ficha ------------------------------ */
   function abrirFicha(id) {
-    const p = MUK_PRODUCTOS.find((x) => String(x.id) === String(id));
+    const p = PRODUCTOS.find((x) => String(x.id) === String(id));
     if (!p) return;
     $("#pdpLinea").textContent = p.linea;
     $("#pdpBody").innerHTML = `
@@ -122,7 +155,7 @@
       return;
     }
     cuerpo.innerHTML = carrito.map((l) => {
-      const p = MUK_PRODUCTOS.find((x) => String(x.id) === String(l.id));
+      const p = PRODUCTOS.find((x) => String(x.id) === String(l.id));
       if (!p) return "";
       return `
         <div class="cart-line">
@@ -145,7 +178,7 @@
   function pedirPorWhatsApp() {
     if (!carrito.length) return;
     const lineas = carrito.map((l) => {
-      const p = MUK_PRODUCTOS.find((x) => String(x.id) === String(l.id));
+      const p = PRODUCTOS.find((x) => String(x.id) === String(l.id));
       return p ? `• ${l.cant} x ${p.nombre} — ${soles(p.precio * l.cant)}` : "";
     }).filter(Boolean);
     const texto = `Hola Cieza Barber, quiero pedir estos productos MUK:\n\n${lineas.join("\n")}\n\nTotal: ${soles(totalCarrito())}`;
@@ -221,7 +254,8 @@
   $("#cartCheckout").addEventListener("click", pedirPorWhatsApp);
 
   /* ------------------------------ arranque ------------------------------ */
-  pintarFiltros();
-  pintarGrid();
   pintarContador();
+  pintarFiltros();
+  grid.innerHTML = '<p class="loading">Cargando productos…</p>';
+  cargarProductos().then(pintarGrid);
 })();
