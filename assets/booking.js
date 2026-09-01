@@ -49,7 +49,12 @@
     dayOffset: 0, dateIdx: null, time: null, firstVisit: null,
     nombre: "", telefono: "", comentario: "",
     disponibilidad: {}, dispLoading: false, dispError: false,
-    enviando: false, error: null, confirmada: false
+    enviando: false, error: null, confirmada: false,
+    // Pago del adelanto: `pago` llega de /public/reservas cuando la reserva
+    // quedó en stand-by. Sin él la cita ya está confirmada y no hay paso de
+    // pago que mostrar.
+    reservaId: null, pago: null, pagoEstado: "pendiente", pagoError: null,
+    subiendo: false, copiado: false, restanteMs: 0, previewCaptura: null
   };
 
   /* ------------------------------ datos ------------------------------ */
@@ -119,6 +124,9 @@
         return;
       }
       if (!res.ok) throw new Error("bad_status");
+      const data = await res.json();
+      state.reservaId = data.reserva_id || null;
+      state.pago = data.pago || null;
     } catch (e) {
       state.enviando = false;
       state.error = "No se pudo enviar tu solicitud. Revisa tu conexión e inténtalo de nuevo.";
@@ -127,7 +135,118 @@
     }
     state.enviando = false;
     state.confirmada = true;
+    if (state.pago) arrancarCuenta();
     render();
+  }
+
+  /* --------------------------- adelanto (Yape) --------------------------- */
+
+  // El límite viene del servidor como instante absoluto, no como "quedan N
+  // minutos": si el reloj del teléfono está desfasado, igual se cuenta contra
+  // el mismo momento que va a aplicar el barrido del bot.
+  let tickHandle = null;
+  function arrancarCuenta() {
+    clearInterval(tickHandle);
+    const limite = new Date(state.pago.expira_at).getTime();
+    const tick = () => {
+      state.restanteMs = Math.max(0, limite - Date.now());
+      if (state.restanteMs === 0) {
+        clearInterval(tickHandle);
+        // Solo se marca expirada si el cliente no llegó a subir nada; si ya
+        // subió y quedó en revisión, su horario sigue apartado.
+        if (state.pagoEstado === "pendiente") state.pagoEstado = "expirado";
+      }
+      render();
+    };
+    tick();
+    tickHandle = setInterval(tick, 1000);
+  }
+
+  function mmss(ms) {
+    const total = Math.ceil(ms / 1000);
+    return `${String(Math.floor(total / 60)).padStart(2, "0")}:${String(total % 60).padStart(2, "0")}`;
+  }
+
+  async function copiarYape() {
+    const numero = state.pago.yape;
+    try {
+      await navigator.clipboard.writeText(numero);
+    } catch (e) {
+      // Safari/iOS fuera de HTTPS y navegadores viejos no exponen el
+      // portapapeles: se copia con el textarea temporal de toda la vida.
+      const ta = document.createElement("textarea");
+      ta.value = numero;
+      ta.setAttribute("readonly", "");
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand("copy"); } catch (e2) { /* nada que hacer */ }
+      document.body.removeChild(ta);
+    }
+    state.copiado = true;
+    render();
+    setTimeout(() => { state.copiado = false; render(); }, 2200);
+  }
+
+  /**
+   * Reescala la captura antes de subirla: un screenshot de un iPhone puede
+   * pesar 6 MB y no aporta nada frente a 1600px de ancho — la subida por
+   * datos móviles se vuelve viable y el análisis lee igual el monto.
+   */
+  function comprimirImagen(file) {
+    return new Promise((resolve, reject) => {
+      const url = URL.createObjectURL(file);
+      const img = new Image();
+      img.onload = () => {
+        URL.revokeObjectURL(url);
+        const MAX = 1600;
+        const escala = Math.min(1, MAX / Math.max(img.width, img.height));
+        const canvas = document.createElement("canvas");
+        canvas.width = Math.round(img.width * escala);
+        canvas.height = Math.round(img.height * escala);
+        canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
+        const dataUrl = canvas.toDataURL("image/jpeg", 0.85);
+        resolve({ base64: dataUrl.split(",")[1], mime: "image/jpeg", preview: dataUrl });
+      };
+      img.onerror = () => { URL.revokeObjectURL(url); reject(new Error("no_es_imagen")); };
+      img.src = url;
+    });
+  }
+
+  async function subirComprobante(file) {
+    if (!file || !state.pago) return;
+    state.subiendo = true;
+    state.pagoError = null;
+    render();
+
+    try {
+      const { base64, mime, preview } = await comprimirImagen(file);
+      state.previewCaptura = preview;
+      const res = await fetch(`${BOT_API_URL}/public/reservas/${encodeURIComponent(state.reservaId)}/comprobante`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ upload_token: state.pago.upload_token, mime_type: mime, imagen_base64: base64 })
+      });
+
+      if (res.status === 409) {
+        state.pagoEstado = "expirado";
+        clearInterval(tickHandle);
+        return;
+      }
+      if (!res.ok) throw new Error("bad_status");
+
+      const data = await res.json();
+      state.pagoEstado = data.estado === "confirmado" ? "confirmado" : "revision";
+      // Confirmada o en revisión, en ambos casos el horario deja de correr
+      // peligro: el reloj del servidor ya se detuvo.
+      clearInterval(tickHandle);
+    } catch (e) {
+      state.pagoError = "No se pudo subir la captura. Revisa tu conexión e inténtalo otra vez.";
+    } finally {
+      state.subiendo = false;
+      render();
+    }
   }
 
   /* ------------------------------ utilidades ------------------------------ */
@@ -308,9 +427,118 @@
       <div class="policy"><strong>Política de reserva:</strong> se confirma con el 50% de adelanto. Si llegas con más de 5 minutos de retraso, el 50% abonado no se reembolsa.</div>`;
   }
 
-  function confirmacion() {
+  function cuandoTexto() {
     const days = getDays();
     const fecha = days[state.dateIdx];
+    if (!fecha) return "";
+    return `${WEEKDAYS[fecha.getDay()]} ${fecha.getDate()} de ${MONTHS[fecha.getMonth()]} a las ${esc(state.time || "")}`;
+  }
+
+  /** Ícono oficial de Yape (recortado del logo completo, solo la burbuja). */
+  function yapeMark() {
+    return `<img class="yape-mark" src="assets/img/yape-icon.png" alt="" width="42" height="42">`;
+  }
+
+  /** Pantalla del adelanto: la cita está apartada, todavía no agendada. */
+  function pasoPago() {
+    const p = state.pago;
+
+    if (state.pagoEstado === "confirmado") {
+      return `
+        <div class="ok-box">
+          <div class="tick">✓</div>
+          <h2 class="display" style="font-size:clamp(26px,4vw,42px)">Cita agendada</h2>
+          <p class="text muted" style="max-width:44ch">
+            Recibimos tu adelanto y tu cita del ${cuandoTexto()} quedó confirmada. Te esperamos en el estudio 💈
+          </p>
+          ${state.previewCaptura ? `<img class="pay-thumb" src="${state.previewCaptura}" alt="Constancia enviada">` : ""}
+          <button class="btn23 outline" data-close-modal><span>Listo</span><i class="f1"></i><i class="f2"></i></button>
+        </div>`;
+    }
+
+    if (state.pagoEstado === "revision") {
+      return `
+        <div class="ok-box">
+          <div class="tick">⏳</div>
+          <h2 class="display" style="font-size:clamp(26px,4vw,42px)">Captura recibida</h2>
+          <p class="text muted" style="max-width:46ch">
+            No pudimos validarla automáticamente, así que la va a revisar un asesor. Tu horario del ${cuandoTexto()}
+            queda apartado mientras tanto — te escribimos al ${esc(state.telefono)} apenas quede confirmado.
+          </p>
+          ${state.previewCaptura ? `<img class="pay-thumb" src="${state.previewCaptura}" alt="Constancia enviada">` : ""}
+          <button class="btn23 outline" data-close-modal><span>Entendido</span><i class="f1"></i><i class="f2"></i></button>
+        </div>`;
+    }
+
+    if (state.pagoEstado === "expirado") {
+      return `
+        <div class="ok-box">
+          <div class="tick">⌛</div>
+          <h2 class="display" style="font-size:clamp(26px,4vw,42px)">Se liberó el horario</h2>
+          <p class="text muted" style="max-width:46ch">
+            Pasó el tiempo para enviar la constancia del adelanto, así que el ${cuandoTexto()} volvió a quedar
+            disponible. Si ya yapeaste, escríbenos por WhatsApp con la captura y lo resolvemos.
+          </p>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center">
+            <a class="btn23" href="${waLink()}" target="_blank" rel="noopener"><span>Escribir por WhatsApp</span><i class="f1"></i><i class="f2"></i></a>
+            <button class="btn23 outline" data-close-modal><span>Cerrar</span><i class="f1"></i><i class="f2"></i></button>
+          </div>
+        </div>`;
+    }
+
+    const quedanPoco = state.restanteMs < 2 * 60 * 1000;
+    return `
+      <div class="pay">
+        <div class="pay-head">
+          <p class="mini muted" style="margin:0">Tu horario está apartado, falta el adelanto</p>
+          <div class="pay-amount">${esc(p.adelanto_texto)}
+            <small>50% de adelanto · ${cuandoTexto()}</small>
+          </div>
+        </div>
+
+        <button type="button" class="yape-card${state.copiado ? " copied" : ""}" data-copiar-yape>
+          ${yapeMark()}
+          <span class="yape-txt">
+            <span class="yape-name">Yape · Cieza Barber Studio</span>
+            <span class="yape-num">${esc(formatearNumero(p.yape))}</span>
+          </span>
+          <span class="yape-hint">${state.copiado ? "¡Copiado!" : "Toca para<br>copiar"}</span>
+        </button>
+
+        ${state.pagoError ? `<div class="alert" style="margin:0">${esc(state.pagoError)}</div>` : ""}
+
+        <div class="pay-upload${state.subiendo ? " busy" : ""}">
+          <input type="file" id="bkComprobante" accept="image/jpeg,image/png,image/webp">
+          <label for="bkComprobante">${state.subiendo ? "Subiendo captura…" : "Subir captura del Yape"}</label>
+        </div>
+
+        <p class="pay-count${quedanPoco ? " warn" : ""}">
+          <b>${mmss(state.restanteMs)}</b><br>
+          Si no recibimos la captura en ese tiempo, la fecha y hora quedan liberadas.
+        </p>
+
+        <div class="pay-steps">
+          <ol>
+            <li>Yapea ${esc(p.adelanto_texto)} al número de arriba.</li>
+            <li>Toma captura de la constancia.</li>
+            <li>Súbela acá y tu cita queda agendada al instante.</li>
+          </ol>
+        </div>
+
+        <p class="pay-note">
+          ¿Prefieres mandarla por WhatsApp? También vale:
+          <a href="${waLink()}" target="_blank" rel="noopener" style="color:inherit">escríbenos</a>.
+        </p>
+      </div>`;
+  }
+
+  /** 914851374 → 914 851 374, más fácil de verificar de un vistazo. */
+  function formatearNumero(n) {
+    return String(n).replace(/(\d{3})(\d{3})(\d{3})/, "$1 $2 $3");
+  }
+
+  /** Reserva sin adelanto calculable: el monto lo coordina el staff. */
+  function confirmacion() {
     const barbero = BARBEROS.find((b) => b.id === state.barbero);
     return `
       <div class="ok-box">
@@ -318,7 +546,7 @@
         <h2 class="display" style="font-size:clamp(26px,4vw,42px)">Cita solicitada</h2>
         <p class="text muted" style="max-width:44ch">
           Te escribiremos al <strong>${esc(state.telefono)}</strong> para confirmar tu cita${barbero ? ` con ${esc(barbero.nombre)}` : ""} del
-          ${fecha ? `${WEEKDAYS[fecha.getDay()]} ${fecha.getDate()} de ${MONTHS[fecha.getMonth()]}` : ""} a las ${esc(state.time || "")}.
+          ${cuandoTexto()} y coordinar el adelanto.
         </p>
         <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:8px">
           <a class="btn23" href="https://wa.me/51973298407?text=${encodeURIComponent("Hola, acabo de reservar una cita en la web a nombre de " + state.nombre)}" target="_blank" rel="noopener"><span>Escribir por WhatsApp</span><i class="f1"></i><i class="f2"></i></a>
@@ -341,7 +569,7 @@
     if (state.confirmada) {
       stepsEl.innerHTML = "";
       foot.style.display = "none";
-      body.innerHTML = confirmacion();
+      body.innerHTML = state.pago ? pasoPago() : confirmacion();
       return;
     }
     foot.style.display = "";
@@ -361,7 +589,19 @@
   }
 
   /* ------------------------------ eventos ------------------------------ */
+  body.addEventListener("change", (e) => {
+    if (e.target.id === "bkComprobante") {
+      const file = e.target.files && e.target.files[0];
+      // Se limpia el input para que volver a elegir la MISMA foto (tras un
+      // error de red) dispare el change otra vez.
+      e.target.value = "";
+      subirComprobante(file);
+    }
+  });
+
   body.addEventListener("click", (e) => {
+    if (e.target.closest("[data-copiar-yape]")) { copiarYape(); return; }
+
     const chip = e.target.closest("[data-filtro]");
     if (chip) { state.filtro = chip.dataset.filtro; render(); return; }
 
@@ -432,6 +672,11 @@
       state.confirmada = false;
       state.step = 1; state.serviceIds = []; state.barbero = null; state.dateIdx = null; state.time = null;
       state.firstVisit = null; state.comentario = ""; state.error = null;
+      // El contador de la reserva anterior seguiría corriendo y repintando
+      // el modal encima del paso 1.
+      clearInterval(tickHandle);
+      state.reservaId = null; state.pago = null; state.pagoEstado = "pendiente";
+      state.pagoError = null; state.subiendo = false; state.previewCaptura = null; state.restanteMs = 0;
     }
     // Solo se preselecciona lo que existe en el catálogo real: el bot valida
     // los ids contra la tabla `services` y rechaza lo que no reconoce.
