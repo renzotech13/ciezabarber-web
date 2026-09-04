@@ -79,7 +79,11 @@
     const desde = toISO(days[0]);
     const hasta = toISO(days[days.length - 1]);
     try {
-      const url = `${BOT_API_URL}/public/disponibilidad?servicio_ids=${encodeURIComponent(state.serviceIds.join(","))}&fecha_desde=${desde}&fecha_hasta=${hasta}`;
+      // El barbero ya se eligió en el paso anterior: pedimos SU agenda, no la
+      // del local entero — cada barbero atiende en su propia silla.
+      const barberoSel = BARBEROS.find((b) => b.id === state.barbero);
+      const qBarbero = barberoSel ? `&barbero=${encodeURIComponent(barberoSel.nombre)}` : "";
+      const url = `${BOT_API_URL}/public/disponibilidad?servicio_ids=${encodeURIComponent(state.serviceIds.join(","))}&fecha_desde=${desde}&fecha_hasta=${hasta}${qBarbero}`;
       const res = await fetch(url);
       if (!res.ok) throw new Error("bad_status");
       const data = await res.json();
