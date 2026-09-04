@@ -50,7 +50,7 @@
     nombre: "", telefono: "", comentario: "",
     disponibilidad: {}, dispLoading: false, dispError: false,
     enviando: false, error: null, confirmada: false,
-    // Pago del adelanto: `pago` llega de /public/reservas cuando la reserva
+    // Pago por adelantado: `pago` llega de /public/reservas cuando la reserva
     // quedó en stand-by. Sin él la cita ya está confirmada y no hay paso de
     // pago que mostrar.
     reservaId: null, pago: null, pagoEstado: "pendiente", pagoError: null,
@@ -143,7 +143,7 @@
     render();
   }
 
-  /* --------------------------- adelanto (Yape) --------------------------- */
+  /* ----------------------------- pago (Yape) ----------------------------- */
 
   // El límite viene del servidor como instante absoluto, no como "quedan N
   // minutos": si el reloj del teléfono está desfasado, igual se cuenta contra
@@ -428,7 +428,7 @@
           <p class="mini muted" style="margin-top:12px">Si necesitas cancelar, avísanos con anticipación por WhatsApp.</p>
         </div>
       </div>
-      <div class="policy"><strong>Política de reserva:</strong> se confirma con el 50% de adelanto. Si llegas con más de 5 minutos de retraso, el 50% abonado no se reembolsa.</div>`;
+      <div class="policy"><strong>Política de reserva:</strong> se confirma pagando el servicio por adelantado. Si llegas con más de 5 minutos de retraso, el monto abonado no se reembolsa.</div>`;
   }
 
   function cuandoTexto() {
@@ -443,7 +443,7 @@
     return `<img class="yape-mark" src="assets/img/yape-icon.png" alt="" width="42" height="42">`;
   }
 
-  /** Pantalla del adelanto: la cita está apartada, todavía no agendada. */
+  /** Pantalla del pago: la cita está apartada, todavía no agendada. */
   function pasoPago() {
     const p = state.pago;
 
@@ -453,7 +453,7 @@
           <div class="tick">✓</div>
           <h2 class="display" style="font-size:clamp(26px,4vw,42px)">Cita agendada</h2>
           <p class="text muted" style="max-width:44ch">
-            Recibimos tu adelanto y tu cita del ${cuandoTexto()} quedó confirmada. Te esperamos en el estudio 💈
+            Recibimos tu pago y tu cita del ${cuandoTexto()} quedó confirmada. Te esperamos en el estudio 💈
           </p>
           ${state.previewCaptura ? `<img class="pay-thumb" src="${state.previewCaptura}" alt="Constancia enviada">` : ""}
           <button class="btn23 outline" data-close-modal><span>Listo</span><i class="f1"></i><i class="f2"></i></button>
@@ -480,7 +480,7 @@
           <div class="tick">⌛</div>
           <h2 class="display" style="font-size:clamp(26px,4vw,42px)">Se liberó el horario</h2>
           <p class="text muted" style="max-width:46ch">
-            Pasó el tiempo para enviar la constancia del adelanto, así que el ${cuandoTexto()} volvió a quedar
+            Pasó el tiempo para enviar la constancia del pago, así que el ${cuandoTexto()} volvió a quedar
             disponible. Si ya yapeaste, escríbenos por WhatsApp con la captura y lo resolvemos.
           </p>
           <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center">
@@ -494,9 +494,9 @@
     return `
       <div class="pay">
         <div class="pay-head">
-          <p class="mini muted" style="margin:0">Tu horario está apartado, falta el adelanto</p>
+          <p class="mini muted" style="margin:0">Tu horario está apartado, falta el pago</p>
           <div class="pay-amount">${esc(p.adelanto_texto)}
-            <small>50% de adelanto · ${cuandoTexto()}</small>
+            <small>pago del servicio · ${cuandoTexto()}</small>
           </div>
         </div>
 
@@ -541,7 +541,7 @@
     return String(n).replace(/(\d{3})(\d{3})(\d{3})/, "$1 $2 $3");
   }
 
-  /** Reserva sin adelanto calculable: el monto lo coordina el staff. */
+  /** Reserva sin monto calculable: el pago lo coordina el staff. */
   function confirmacion() {
     const barbero = BARBEROS.find((b) => b.id === state.barbero);
     return `
@@ -550,7 +550,7 @@
         <h2 class="display" style="font-size:clamp(26px,4vw,42px)">Cita solicitada</h2>
         <p class="text muted" style="max-width:44ch">
           Te escribiremos al <strong>${esc(state.telefono)}</strong> para confirmar tu cita${barbero ? ` con ${esc(barbero.nombre)}` : ""} del
-          ${cuandoTexto()} y coordinar el adelanto.
+          ${cuandoTexto()} y coordinar el pago.
         </p>
         <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:8px">
           <a class="btn23" href="https://wa.me/51973298407?text=${encodeURIComponent("Hola, acabo de reservar una cita en la web a nombre de " + state.nombre)}" target="_blank" rel="noopener"><span>Escribir por WhatsApp</span><i class="f1"></i><i class="f2"></i></a>
