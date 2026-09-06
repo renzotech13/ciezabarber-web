@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mi cuenta — Cieza Barber Studio</title>
+<meta name="description" content="Tus citas, tus recompensas y tu saldo a favor en Cieza Barber Studio.">
+<!-- Página privada: no aporta nada en buscadores y expone una URL de sesión. -->
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="assets/img/logo-3.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --beige:#f5f4f1; --black:#0a090c; --ink-soft:#3d3d3d; --gray:#8d8e87; --line:#e0ded7;
+    --ok:#0b8560; --warn:#a34d14;
+    --display:"Archivo","Helvetica Neue",Arial,sans-serif; --serif:"Instrument Serif",Georgia,serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:var(--display);background:var(--beige);color:var(--black);line-height:1.6;font-size:16px}
+  a{color:var(--black)}
+  .wrap{max-width:940px;margin:0 auto;padding:48px 24px 96px}
+  .back{display:inline-block;margin-bottom:28px;color:var(--gray);font-size:14px;text-decoration:none}
+  .back:hover{color:var(--black)}
+  .eyebrow{font-family:var(--serif);color:var(--gray);font-size:15px;margin:0}
+  h1{font-family:var(--display);font-weight:700;font-stretch:125%;text-transform:uppercase;font-size:clamp(30px,5vw,44px);line-height:.98;margin:4px 0 32px}
+  h2{font-family:var(--display);font-weight:700;font-stretch:112%;text-transform:uppercase;font-size:13px;letter-spacing:.06em;margin:0}
+  .serif{font-family:var(--serif)}
+  .muted{color:var(--gray)}
+  .card{border:1px solid var(--line);background:#fff}
+  .card-head{border-bottom:1px solid var(--line);padding:16px 20px 14px}
+  .card-body{padding:16px 20px}
+  .btn{border:1px solid var(--black);background:transparent;color:var(--black);font-family:var(--display);
+       font-weight:700;font-stretch:112%;text-transform:uppercase;letter-spacing:.02em;font-size:12px;
+       line-height:1;padding:12px 16px 10px;cursor:pointer;transition:background .2s,color .2s;text-decoration:none;display:inline-block}
+  .btn:hover{background:#e8e6e0}
+  .btn.on{background:var(--black);color:var(--beige)}
+  .btn.on:hover{opacity:.85}
+  .btn:disabled{opacity:.4;cursor:default}
+  .btn-danger{border-color:#a3231b;color:#a3231b}
+  .btn-danger:hover{background:#f7e9e8}
+  .row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+  .grid{display:grid;gap:16px}
+  @media(min-width:760px){ .grid.dos{grid-template-columns:1fr 1fr} }
+  .cita{border-bottom:1px solid var(--line);padding:14px 20px}
+  .cita:last-child{border-bottom:none}
+  .cita .cuando{font-weight:700}
+  /* Solo la inicial: `capitalize` dejaba "9 De Setiembre". */
+  .cita .cuando::first-letter{text-transform:uppercase}
+  .estado{font-family:var(--display);font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:3px 8px;border:1px solid var(--line)}
+  .premio{display:flex;align-items:center;gap:14px;border-bottom:1px solid var(--line);padding:14px 20px}
+  .premio:last-child{border-bottom:none}
+  .premio .n{font-weight:700;font-stretch:112%;font-size:22px;min-width:44px;text-align:center}
+  .barra{height:6px;background:var(--line);margin-top:8px}
+  .barra i{display:block;height:100%;background:var(--black)}
+  .aviso{border:1px dashed var(--line);padding:14px 18px;font-family:var(--serif);font-size:15px}
+  .codigo{font-family:var(--display);font-weight:700;font-stretch:125%;font-size:34px;letter-spacing:.14em;margin:10px 0}
+  .oculto{display:none}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <a class="back" href="/">← Volver al inicio</a>
+
+  <p class="eyebrow">Cieza Barber Studio</p>
+  <h1>Mi cuenta<span class="muted">.</span></h1>
+
+  <div id="app">
+    <p class="serif muted">Cargando…</p>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="assets/catalog.js"></script>
+<script src="assets/cuenta.js"></script>
+</body>
+</html>
