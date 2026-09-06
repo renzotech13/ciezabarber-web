@@ -20,7 +20,7 @@
   const BARBEROS = [
     { id: "cieza", nombre: "Cieza", rol: "Fundador · Barbero", descanso: 3, foto: "assets/img/ciezabarber_2.jpg" },
     { id: "nilton", nombre: "Nilton", rol: "Barbero profesional", descanso: 2, foto: "assets/img/ciezabarber-nilton.jpg" },
-    { id: "bryan", nombre: "Bryan", rol: "Barbero profesional", descanso: 1, foto: "assets/img/bryan-barber.jpg" }
+    { id: "brayan", nombre: "Brayan", rol: "Barbero profesional", descanso: 1, foto: "assets/img/ciezabarber-brayan.jpg" }
   ];
 
   const $ = (s, c) => (c || document).querySelector(s);
