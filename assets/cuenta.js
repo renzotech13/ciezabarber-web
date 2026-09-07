@@ -248,7 +248,16 @@
 
   /* -------------------------------- carga -------------------------------- */
 
-  async function cargar() {
+  // onAuthStateChange dispara de una con INITIAL_SESSION, así que sin este
+  // candado la página pedía el código DOS veces en paralelo al cargar y se
+  // creaban dos verificaciones a milisegundos de distancia.
+  let cargando = null;
+  function cargar() {
+    if (!cargando) cargando = cargarAhora().finally(() => { cargando = null; });
+    return cargando;
+  }
+
+  async function cargarAhora() {
     const { data: sesion } = await cuentaClient.auth.getSession();
     if (!sesion.session) return pintarLogin();
 
@@ -289,5 +298,4 @@
   // dispara cuando supabase-js termina de canjearla, así que no hace falta
   // leer el hash a mano ni recargar.
   cuentaClient.auth.onAuthStateChange(() => cargar());
-  cargar();
 })();
