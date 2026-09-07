@@ -97,6 +97,16 @@
     render();
   }
 
+  /** Token del cliente logueado con Google, si lo hay. */
+  async function sesionDelSitio() {
+    try {
+      const { data } = await catalogClient.auth.getSession();
+      return data.session?.access_token ?? null;
+    } catch {
+      return null;
+    }
+  }
+
   async function enviarReserva() {
     state.enviando = true;
     state.error = null;
@@ -104,9 +114,16 @@
     const days = getDays();
     const barbero = BARBEROS.find((b) => b.id === state.barbero);
     try {
+      // Si tiene la sesión del sitio abierta, la reserva viaja firmada: el
+      // bot ata esa ficha a su cuenta y la cita le aparece sola en "Mi
+      // cuenta". Reservar sin cuenta sigue funcionando igual que siempre.
+      const sesion = await sesionDelSitio();
       const res = await fetch(`${BOT_API_URL}/public/reservas`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          ...(sesion ? { Authorization: `Bearer ${sesion}` } : {})
+        },
         body: JSON.stringify({
           servicio_ids: state.serviceIds,
           fecha: toISO(days[state.dateIdx]),

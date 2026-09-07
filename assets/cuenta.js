@@ -83,28 +83,32 @@
     });
   }
 
-  function pintarVinculo(datos) {
+  /**
+   * Entró con Google pero ningún cliente tiene ese correo en su ficha. No se
+   * inventa un enlace: pedirle el teléfono y creerle sería regalarle el
+   * historial de quien sea que tenga ese número.
+   */
+  function pintarSinHistorial(email) {
     app.innerHTML = `
       <div class="card">
-        <div class="card-head"><h2>Falta un paso</h2></div>
+        <div class="card-head"><h2>Tu cuenta está lista</h2></div>
         <div class="card-body">
-          <p class="serif" style="margin:0 0 6px;max-width:56ch">
-            Tus citas están guardadas con tu número de WhatsApp. Mándanos este código desde ese número y tu cuenta
-            queda enlazada:
+          <p class="serif" style="margin:0 0 14px;max-width:56ch">
+            Entraste como <strong>${esc(email || "tu cuenta de Google")}</strong>, pero todavía no encontramos citas
+            asociadas a este correo.
           </p>
-          <div class="codigo">${esc(datos.codigo)}</div>
+          <p class="serif muted" style="margin:0 0 18px;max-width:56ch">
+            Reserva desde acá sin cerrar sesión y tu cita aparecerá sola en esta página, con tus recompensas y tu
+            historial. Si ya eres cliente y quieres ver tus visitas anteriores, escríbenos por WhatsApp y las
+            enlazamos con este correo.
+          </p>
           <div class="row">
-            <a class="btn on" href="${esc(datos.wa_url)}" target="_blank" rel="noopener">Enviar por WhatsApp</a>
-            <button class="btn" id="btnYaEnvie">Ya lo envié</button>
+            <a class="btn on" href="/">Reservar una cita</a>
+            <a class="btn" href="https://wa.me/51973298407?text=${encodeURIComponent("Hola, entré a mi cuenta en la web con " + (email || "mi correo") + " y quiero que enlacen mis citas anteriores")}" target="_blank" rel="noopener">Escribir por WhatsApp</a>
           </div>
-          <p class="aviso" style="margin-top:18px">
-            Se enlaza con el número desde el que nos escribas — por eso te pedimos el mensaje a ti en vez de mandarte
-            un código: así nadie puede reclamar el historial de otra persona.
-          </p>
           <button class="btn" id="btnSalir" style="margin-top:18px">Cerrar sesión</button>
         </div>
       </div>`;
-    document.getElementById("btnYaEnvie").addEventListener("click", cargar);
     document.getElementById("btnSalir").addEventListener("click", salir);
   }
 
@@ -270,7 +274,7 @@
       app.innerHTML = `<p class="serif">No pudimos cargar tu cuenta: ${esc(err.message)}</p>`;
       return;
     }
-    if (!vinculo.vinculado) return pintarVinculo(vinculo);
+    if (!vinculo.vinculado) return pintarSinHistorial(vinculo.email);
 
     // A partir de acá manda RLS: cada consulta devuelve solo lo del cliente
     // que entró, sin que el navegador tenga que filtrar por su id.
@@ -297,5 +301,9 @@
   // El login de Google vuelve con la sesión en la URL; onAuthStateChange
   // dispara cuando supabase-js termina de canjearla, así que no hace falta
   // leer el hash a mano ni recargar.
+  // Las dos: onAuthStateChange atrapa la vuelta del login de Google, y la
+  // llamada directa cubre el caso de que no dispare. El candado de arriba se
+  // encarga de que no se pida nada dos veces.
   cuentaClient.auth.onAuthStateChange(() => cargar());
+  cargar();
 })();
