@@ -84,32 +84,57 @@
   }
 
   /**
-   * Entró con Google pero ningún cliente tiene ese correo en su ficha. No se
-   * inventa un enlace: pedirle el teléfono y creerle sería regalarle el
-   * historial de quien sea que tenga ese número.
+   * Tarjeta de WhatsApp dentro del perfil.
+   *
+   * Verificar el número es OPCIONAL y no bloquea nada: al perfil se entra
+   * solo con Google. Sirve para dos cosas concretas — traer el historial de
+   * citas que hizo por WhatsApp (que está guardado bajo su número, no bajo
+   * su correo) y poder avisarle por ahí.
    */
-  function pintarSinHistorial(email) {
-    app.innerHTML = `
-      <div class="card">
-        <div class="card-head"><h2>Tu cuenta está lista</h2></div>
-        <div class="card-body">
-          <p class="serif" style="margin:0 0 14px;max-width:56ch">
-            Entraste como <strong>${esc(email || "tu cuenta de Google")}</strong>, pero todavía no encontramos citas
-            asociadas a este correo.
-          </p>
-          <p class="serif muted" style="margin:0 0 18px;max-width:56ch">
-            Reserva desde acá sin cerrar sesión y tu cita aparecerá sola en esta página, con tus recompensas y tu
-            historial. Si ya eres cliente y quieres ver tus visitas anteriores, escríbenos por WhatsApp y las
-            enlazamos con este correo.
-          </p>
-          <div class="row">
-            <a class="btn on" href="/">Reservar una cita</a>
-            <a class="btn" href="https://wa.me/51973298407?text=${encodeURIComponent("Hola, entré a mi cuenta en la web con " + (email || "mi correo") + " y quiero que enlacen mis citas anteriores")}" target="_blank" rel="noopener">Escribir por WhatsApp</a>
+  function bloqueWhatsapp(vinculo) {
+    if (vinculo.vinculado) {
+      return `
+        <div class="card" style="margin-top:16px">
+          <div class="card-head"><h2>WhatsApp</h2></div>
+          <div class="card-body">
+            <p class="serif" style="margin:0">
+              Verificado: <strong>+${esc(vinculo.telefono)}</strong>. Te avisamos por ahí de tus citas y de tus
+              recompensas.
+            </p>
           </div>
-          <button class="btn" id="btnSalir" style="margin-top:18px">Cerrar sesión</button>
+        </div>`;
+    }
+    return `
+      <div class="card" style="margin-top:16px">
+        <div class="card-head"><h2>Verifica tu WhatsApp</h2></div>
+        <div class="card-body" id="bloqueWa">
+          <p class="serif muted" style="margin:0 0 14px;max-width:52ch">
+            Tus citas anteriores están guardadas con tu número, no con tu correo. Verifícalo y aparecerán acá
+            —con los cortes que llevas acumulados— y podremos avisarte por WhatsApp.
+          </p>
+          <button class="btn on" id="btnVerificarWa">Verificar mi WhatsApp</button>
         </div>
       </div>`;
-    document.getElementById("btnSalir").addEventListener("click", salir);
+  }
+
+  /** Paso 2 de la verificación: el código que el cliente nos manda. */
+  function pintarCodigoWa(datos) {
+    const caja = document.getElementById("bloqueWa");
+    if (!caja) return;
+    caja.innerHTML = `
+      <p class="serif" style="margin:0 0 6px;max-width:52ch">
+        Mándanos este código por WhatsApp desde el número que quieres verificar:
+      </p>
+      <div class="codigo">${esc(datos.codigo)}</div>
+      <div class="row">
+        <a class="btn on" href="${esc(datos.wa_url)}" target="_blank" rel="noopener">Enviar por WhatsApp</a>
+        <button class="btn" id="btnYaEnvie">Ya lo envié</button>
+      </div>
+      <p class="serif muted" style="margin:14px 0 0;font-size:14px;max-width:52ch">
+        Se vincula con el número desde el que nos escribas — por eso te pedimos el mensaje a ti en vez de mandarte
+        un código: así nadie puede reclamar el historial de otra persona.
+      </p>`;
+    document.getElementById("btnYaEnvie").addEventListener("click", cargar);
   }
 
   function bloqueCitas(citas) {
@@ -210,24 +235,47 @@
       </div>`;
   }
 
-  function pintarPanel({ cliente, citas, recompensas, canjeadas, saldo }) {
+  function pintarPanel({ vinculo, cliente, citas, recompensas, canjeadas, saldo }) {
     const cortes = citas.filter((c) => c.estado === "completada").length;
+    const identidad = vinculo.vinculado
+      ? `${esc(cliente.nombre || "Hola")} · WhatsApp +${esc(cliente.telefono)}`
+      : esc(vinculo.email || "Tu cuenta");
+
     app.innerHTML = `
       <div class="row" style="justify-content:space-between;margin-bottom:20px">
-        <p class="serif muted" style="margin:0">
-          ${esc(cliente.nombre || "Hola")} · WhatsApp ${esc(cliente.telefono)}
-        </p>
+        <p class="serif muted" style="margin:0">${identidad}</p>
         <button class="btn" id="btnSalir">Cerrar sesión</button>
       </div>
       <div class="grid dos">
         <div>${bloqueCitas(citas)}</div>
-        <div>${bloqueRecompensas(cortes, recompensas, canjeadas)}${bloqueSaldo(saldo)}</div>
+        <div>
+          ${bloqueRecompensas(cortes, recompensas, canjeadas)}
+          ${bloqueSaldo(saldo)}
+          ${bloqueWhatsapp(vinculo)}
+        </div>
       </div>`;
 
     document.getElementById("btnSalir").addEventListener("click", salir);
     app.querySelectorAll("[data-cancelar]").forEach((btn) => {
       btn.addEventListener("click", () => cancelar(btn.dataset.cancelar, btn));
     });
+
+    const btnWa = document.getElementById("btnVerificarWa");
+    if (btnWa) {
+      btnWa.addEventListener("click", async () => {
+        btnWa.disabled = true;
+        btnWa.textContent = "Generando…";
+        try {
+          const datos = await llamarBot("/cliente/vinculo/whatsapp", { method: "POST", body: "{}" });
+          if (datos.vinculado) return cargar();
+          pintarCodigoWa(datos);
+        } catch (err) {
+          alert(err.message);
+          btnWa.disabled = false;
+          btnWa.textContent = "Verificar mi WhatsApp";
+        }
+      });
+    }
   }
 
   async function cancelar(citaId, btn) {
@@ -274,14 +322,37 @@
       app.innerHTML = `<p class="serif">No pudimos cargar tu cuenta: ${esc(err.message)}</p>`;
       return;
     }
-    if (!vinculo.vinculado) return pintarSinHistorial(vinculo.email);
+
+    // Al perfil se entra SIEMPRE con solo haber entrado con Google. Antes,
+    // no tener ficha de cliente devolvía una pantalla muerta sin panel — y
+    // como las reservas guardan nombre y teléfono pero no correo, eso le
+    // pasaba a casi todo el mundo.
+    //
+    // Las recompensas se piden aunque no haya ficha: son la promesa pública
+    // del programa, y verlas con el contador en cero es justamente lo que
+    // invita a verificar el WhatsApp.
+    const recompensasRes = await cuentaClient
+      .from("recompensas")
+      .select("*")
+      .eq("activo", true)
+      .order("cortes_requeridos");
+
+    if (!vinculo.vinculado) {
+      return pintarPanel({
+        vinculo,
+        cliente: { nombre: null, telefono: "" },
+        citas: [],
+        recompensas: recompensasRes.data || [],
+        canjeadas: [],
+        saldo: 0,
+      });
+    }
 
     // A partir de acá manda RLS: cada consulta devuelve solo lo del cliente
     // que entró, sin que el navegador tenga que filtrar por su id.
-    const [clienteRes, citasRes, recompensasRes, canjeadasRes, creditosRes] = await Promise.all([
+    const [clienteRes, citasRes, canjeadasRes, creditosRes] = await Promise.all([
       cuentaClient.from("clientes").select("id, nombre, telefono").maybeSingle(),
       cuentaClient.from("citas").select("id, inicio_utc, estado, barbero, services(name)").order("inicio_utc", { ascending: false }),
-      cuentaClient.from("recompensas").select("*").eq("activo", true).order("cortes_requeridos"),
       cuentaClient.from("recompensas_canjeadas").select("recompensa_id"),
       cuentaClient.from("creditos_cliente").select("monto"),
     ]);
@@ -290,6 +361,7 @@
     const saldo = (creditosRes.data || []).reduce((s, c) => s + Number(c.monto), 0);
 
     pintarPanel({
+      vinculo,
       cliente,
       citas: citasRes.data || [],
       recompensas: recompensasRes.data || [],
