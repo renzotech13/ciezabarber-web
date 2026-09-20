@@ -1,3 +1,7 @@
 .vercel
 .DS_Store
 .env*
+
+# Documento personal: NO debe publicarse, todo lo que vive en web/ queda
+# accesible en el sitio.
+assets/img/dnicara.jpg
