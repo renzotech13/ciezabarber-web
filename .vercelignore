@@ -1,0 +1,9 @@
+# Vercel NO respeta .gitignore: sube todo lo que esté en la carpeta, esté
+# versionado o no. Este archivo es el único que lo frena.
+.vercel
+.DS_Store
+.env*
+scripts
+
+# Documento personal: no puede terminar accesible en el sitio.
+assets/img/dnicara.jpg
