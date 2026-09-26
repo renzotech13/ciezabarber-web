@@ -46,7 +46,7 @@
     step: 1, grupos: [], cargandoCatalogo: true, catalogoError: false,
     filtro: "Todos", serviceIds: [],
     barbero: null,
-    dayOffset: 0, dateIdx: null, time: null, firstVisit: null,
+    dayOffset: 0, dateIdx: null, time: null, firstVisit: null, acompanante: false,
     nombre: "", telefono: "", comentario: "",
     disponibilidad: {}, dispLoading: false, dispError: false,
     enviando: false, error: null, confirmada: false,
@@ -132,6 +132,7 @@
           telefono: normalizarTelefono(state.telefono.trim()),
           primera_visita: state.firstVisit === "si" ? true : state.firstVisit === "no" ? false : null,
           comentario: state.comentario || undefined,
+          acompanantes: state.acompanante ? 1 : 0,
           ...(barbero ? { barbero: barbero.nombre } : {})
         })
       });
@@ -408,6 +409,12 @@
         <button data-visita="si" class="${state.firstVisit === "si" ? "on" : ""}">Sí, primera vez</button>
         <button data-visita="no" class="${state.firstVisit === "no" ? "on" : ""}">Ya vine antes</button>
       </div>
+      <p class="text muted">¿Vienes con alguien?</p>
+      <div class="pick" style="margin:12px 0 6px">
+        <button data-acomp="0" class="${!state.acompanante ? "on" : ""}">Voy solo</button>
+        <button data-acomp="1" class="${state.acompanante ? "on" : ""}">Con 1 acompañante</button>
+      </div>
+      <p class="mini muted" style="margin:0 0 28px">Máximo 1 acompañante por reserva. Si también quiere un servicio, debe reservar su propio horario.</p>
       <div class="field">
         <label for="bkComentario">¿Algo que debamos saber? (opcional)</label>
         <textarea id="bkComentario" rows="4" placeholder="Ej. quiero fade bajo, tengo el cabello teñido…">${esc(state.comentario)}</textarea>
@@ -656,6 +663,9 @@
     const hora = e.target.closest("[data-hora]");
     if (hora) { state.time = hora.dataset.hora; render(); return; }
 
+    const acomp = e.target.closest("[data-acomp]");
+    if (acomp) { state.acompanante = acomp.dataset.acomp === "1"; render(); return; }
+
     const visita = e.target.closest("[data-visita]");
     if (visita) { state.firstVisit = visita.dataset.visita; render(); return; }
   });
@@ -692,7 +702,7 @@
       // nueva reserva desde cero después de confirmar una
       state.confirmada = false;
       state.step = 1; state.serviceIds = []; state.barbero = null; state.dateIdx = null; state.time = null;
-      state.firstVisit = null; state.comentario = ""; state.error = null;
+      state.firstVisit = null; state.acompanante = false; state.comentario = ""; state.error = null;
       // El contador de la reserva anterior seguiría corriendo y repintando
       // el modal encima del paso 1.
       clearInterval(tickHandle);
