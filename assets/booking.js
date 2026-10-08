@@ -177,8 +177,21 @@
         // Solo se marca expirada si el cliente no llegó a subir nada; si ya
         // subió y quedó en revisión, su horario sigue apartado.
         if (state.pagoEstado === "pendiente") state.pagoEstado = "expirado";
+        render();
+        return;
       }
-      render();
+      // Solo se actualiza el reloj, NO se redibuja el modal: render() reemplaza
+      // todo el cuerpo, incluido el <input type="file">. Con el selector de
+      // fotos abierto (en un celular tarda varios segundos) el campo se
+      // destruía y la foto elegida llegaba a un campo que ya no existía: el
+      // cliente elegía la captura y no pasaba nada, sin error ni envío.
+      const reloj = body.querySelector(".pay-count b");
+      if (reloj) {
+        reloj.textContent = mmss(state.restanteMs);
+        reloj.parentElement.classList.toggle("warn", state.restanteMs < 2 * 60 * 1000);
+      } else {
+        render();
+      }
     };
     tick();
     tickHandle = setInterval(tick, 1000);
