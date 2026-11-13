@@ -53,6 +53,8 @@
     // Pago por adelantado: `pago` llega de /public/reservas cuando la reserva
     // quedó en stand-by. Sin él la cita ya está confirmada y no hay paso de
     // pago que mostrar.
+    // Campaña «orden de llegada»: si viene {mensaje}, nadie elige hora y el modal solo muestra el aviso.
+    ordenLlegada: null,
     reservaId: null, pago: null, pagoEstado: "pendiente", pagoError: null,
     subiendo: false, copiado: false, restanteMs: 0, previewCaptura: null
   };
@@ -137,6 +139,14 @@
         })
       });
       if (res.status === 409) {
+        const cuerpo = await res.clone().json().catch(() => ({}));
+        if (cuerpo && cuerpo.error === "orden_de_llegada") {
+          // Se encendió la campaña con el modal ya abierto: no hay hora que separar.
+          state.enviando = false;
+          state.ordenLlegada = { mensaje: cuerpo.mensaje || "" };
+          render();
+          return;
+        }
         // Alguien tomó ese horario mientras el cliente llenaba el formulario.
         state.enviando = false;
         state.error = "Ese horario se acaba de ocupar. Elige otro, por favor.";
@@ -606,7 +616,47 @@
     return false;
   }
 
+  /** Texto de WhatsApp para quien llega al aviso de campaña: pregunta, no «quiero agendar» (no hay agenda). */
+  function waInfoLink() {
+    return `https://wa.me/51973298407?text=${encodeURIComponent("Hola, tengo una consulta sobre la atención por orden de llegada")}`;
+  }
+
+  /** Pantalla de la campaña: sin pasos ni horarios, solo cómo se atiende. */
+  function avisoOrdenLlegada() {
+    return `
+      <div class="ok-box">
+        <div class="tick">→</div>
+        <h2 class="display" style="font-size:clamp(24px,3.6vw,38px)">Atención por orden de llegada</h2>
+        <p class="text muted" style="max-width:440px">${esc(state.ordenLlegada.mensaje || "Por la campaña de fin de año no se separa hora: te atendemos en el orden en que llegues.")}</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:6px">
+          <a class="btn23" href="${waInfoLink()}" target="_blank" rel="noopener"><span>Escribir por WhatsApp</span><i class="f1"></i><i class="f2"></i></a>
+          <button class="btn23 outline" data-close-modal><span>Entendido</span><i class="f1"></i><i class="f2"></i></button>
+        </div>
+      </div>`;
+  }
+
+  /** ¿Se puede elegir hora? Falla en silencio (null = flujo normal): si el bot no responde, el servidor igual rechaza. */
+  async function consultarModo() {
+    try {
+      const ctl = new AbortController();
+      const t = setTimeout(() => ctl.abort(), 2500);
+      const res = await fetch(`${BOT_API_URL}/public/modo`, { signal: ctl.signal, cache: "no-store" });
+      clearTimeout(t);
+      if (!res.ok) return null;
+      const d = await res.json();
+      return d && d.orden_llegada ? { mensaje: d.mensaje || "" } : null;
+    } catch (e) {
+      return null;
+    }
+  }
+
   function render() {
+    if (state.ordenLlegada) {
+      stepsEl.innerHTML = "";
+      foot.style.display = "none";
+      body.innerHTML = avisoOrdenLlegada();
+      return;
+    }
     if (state.confirmada) {
       stepsEl.innerHTML = "";
       foot.style.display = "none";
@@ -710,7 +760,9 @@
   });
 
   /* ------------------------------ apertura ------------------------------ */
-  function abrir(ids) {
+  async function abrir(ids) {
+    // Se pregunta cada vez que se abre: se enciende y se apaga desde el panel sin recargar la página.
+    state.ordenLlegada = await consultarModo();
     if (state.confirmada) {
       // nueva reserva desde cero después de confirmar una
       state.confirmada = false;
