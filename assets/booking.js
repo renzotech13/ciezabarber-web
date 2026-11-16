@@ -517,7 +517,7 @@
             queda apartado mientras tanto — te escribimos al ${esc(state.telefono)} apenas quede confirmado.
           </p>
           ${state.previewCaptura ? `<img class="pay-thumb" src="${state.previewCaptura}" alt="Constancia enviada">` : ""}
-          <button class="btn23 outline" data-close-modal><span>Cerrar</span><i class="f1"></i><i class="f2"></i></button>
+          <button class="btn23 outline" data-close-modal><span>Entendido</span><i class="f1"></i><i class="f2"></i></button>
         </div>`;
     }
 
