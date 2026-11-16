@@ -517,7 +517,7 @@
             queda apartado mientras tanto — te escribimos al ${esc(state.telefono)} apenas quede confirmado.
           </p>
           ${state.previewCaptura ? `<img class="pay-thumb" src="${state.previewCaptura}" alt="Constancia enviada">` : ""}
-          <button class="btn23 outline" data-close-modal><span>Entendido</span><i class="f1"></i><i class="f2"></i></button>
+          <button class="btn23 outline" data-close-modal><span>Cerrar</span><i class="f1"></i><i class="f2"></i></button>
         </div>`;
     }
 
@@ -616,9 +616,9 @@
     return false;
   }
 
-  /** Texto de WhatsApp para quien llega al aviso de campaña: pregunta, no «quiero agendar» (no hay agenda). */
+  /** Texto de WhatsApp para quien llega al aviso de campaña: confirma su atención, no «quiero agendar» (no hay agenda). */
   function waInfoLink() {
-    return `https://wa.me/51973298407?text=${encodeURIComponent("Hola, tengo una consulta sobre la atención por orden de llegada")}`;
+    return `https://wa.me/51973298407?text=${encodeURIComponent("Hola, quiero confirmar mi atención por orden de llegada")}`;
   }
 
   /** Pantalla de la campaña: sin pasos ni horarios, solo cómo se atiende. */
@@ -627,9 +627,10 @@
       <div class="ok-box">
         <div class="tick">→</div>
         <h2 class="display" style="font-size:clamp(24px,3.6vw,38px)">Atención por orden de llegada</h2>
-        <p class="text muted" style="max-width:440px">${esc(state.ordenLlegada.mensaje || "Por la campaña de fin de año no se separa hora: te atendemos en el orden en que llegues.")}</p>
+        <p class="text muted" style="max-width:440px">${esc(state.ordenLlegada.mensaje || "Por la alta demanda de fin de año estamos atendiendo por orden de llegada: no hay horarios para separar.")}</p>
+        <p class="text" style="max-width:440px;font-weight:600">Escríbenos por WhatsApp para confirmar tu atención.</p>
         <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:6px">
-          <a class="btn23" href="${waInfoLink()}" target="_blank" rel="noopener"><span>Escribir por WhatsApp</span><i class="f1"></i><i class="f2"></i></a>
+          <a class="btn23" href="${waInfoLink()}" target="_blank" rel="noopener"><span>Confirmar por WhatsApp</span><i class="f1"></i><i class="f2"></i></a>
           <button class="btn23 outline" data-close-modal><span>Entendido</span><i class="f1"></i><i class="f2"></i></button>
         </div>
       </div>`;
