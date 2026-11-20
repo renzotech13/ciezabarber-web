@@ -259,27 +259,58 @@
     });
   }
 
+  /**
+   * Qué decirle al cliente según dónde falló la subida. Antes todo caía en «revisa tu conexión», y así no había forma de
+   * saber si era la foto, la red, la reserva vencida o el servidor. El código al final sirve para diagnosticar cuando el
+   * cliente manda la captura de pantalla del error.
+   */
+  function motivoErrorSubida(etapa, status, codigo) {
+    const sufijo = ` (código: ${etapa}${status ? "-" + status : ""}${codigo ? "-" + codigo : ""})`;
+    if (etapa === "imagen") {
+      return "No pudimos abrir esa imagen en tu celular. Sube una captura de pantalla de la constancia del Yape (no una foto en formato HEIC)." + sufijo;
+    }
+    if (etapa === "red") {
+      return "No hay conexión con nuestro servidor: revisa tu internet (datos o wifi) e inténtalo otra vez." + sufijo;
+    }
+    if (status === 404) return "Tu reserva ya no está disponible: los horarios se liberan a los 10 minutos sin captura. Vuelve a reservar." + sufijo;
+    if (status === 413) return "La imagen pesa demasiado. Sube una captura de pantalla en vez de una foto." + sufijo;
+    if (status === 429) return "Hubo demasiados intentos seguidos. Espera un minuto e inténtalo otra vez." + sufijo;
+    if (status === 400) return "La imagen llegó dañada o en un formato que no aceptamos. Sube una captura de pantalla (JPG o PNG)." + sufijo;
+    if (status >= 500) {
+      return "Falló algo de nuestro lado al guardar tu captura. Mándanosla por WhatsApp con el enlace de abajo y confirmamos tu cita." + sufijo;
+    }
+    return "No se pudo subir la captura. Inténtalo otra vez o mándala por WhatsApp." + sufijo;
+  }
+
   async function subirComprobante(file) {
     if (!file || !state.pago) return;
     state.subiendo = true;
     state.pagoError = null;
     render();
 
+    let etapa = "imagen";
     try {
       const { base64, mime, preview } = await comprimirImagen(file);
       state.previewCaptura = preview;
+      etapa = "red";
       const res = await fetch(`${BOT_API_URL}/public/reservas/${encodeURIComponent(state.reservaId)}/comprobante`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ upload_token: state.pago.upload_token, mime_type: mime, imagen_base64: base64 })
       });
+      etapa = "servidor";
 
       if (res.status === 409) {
         state.pagoEstado = "expirado";
         clearInterval(tickHandle);
         return;
       }
-      if (!res.ok) throw new Error("bad_status");
+      if (!res.ok) {
+        const cuerpo = await res.json().catch(() => ({}));
+        console.error("Subida del comprobante rechazada", res.status, cuerpo);
+        state.pagoError = motivoErrorSubida(etapa, res.status, cuerpo && cuerpo.error);
+        return;
+      }
 
       const data = await res.json();
       state.pagoEstado = data.estado === "confirmado" ? "confirmado" : "revision";
@@ -287,7 +318,8 @@
       // peligro: el reloj del servidor ya se detuvo.
       clearInterval(tickHandle);
     } catch (e) {
-      state.pagoError = "No se pudo subir la captura. Revisa tu conexión e inténtalo otra vez.";
+      console.error("Falló la subida del comprobante", etapa, e);
+      state.pagoError = motivoErrorSubida(etapa, null, e && e.message);
     } finally {
       state.subiendo = false;
       render();
@@ -556,7 +588,8 @@
           <span class="yape-hint">${state.copiado ? "¡Copiado!" : "Toca para<br>copiar"}</span>
         </button>
 
-        ${state.pagoError ? `<div class="alert" style="margin:0">${esc(state.pagoError)}</div>` : ""}
+        ${state.pagoError ? `<div class="alert" style="margin:0">${esc(state.pagoError)}
+          <a href="https://wa.me/51973298407?text=${encodeURIComponent("Hola, reservé en la web a nombre de " + state.nombre + " para el " + cuandoTexto() + " y no pude subir la captura del Yape. Aquí te la mando.")}" target="_blank" rel="noopener" style="display:block;margin-top:6px;font-weight:600;text-decoration:underline">Mandar la captura por WhatsApp</a></div>` : ""}
 
         <div class="pay-upload${state.subiendo ? " busy" : ""}">
           <input type="file" id="bkComprobante" accept="image/jpeg,image/png,image/webp">
